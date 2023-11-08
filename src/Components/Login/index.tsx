@@ -1,53 +1,22 @@
 import { useContext, useState } from "react";
 import { CurrentUserContext, User } from "../../App";
 
-interface LoginFormValues extends User {
-  password: string;
-}
+// copy pasta from sign up
+const Login: React.FC<{}> = () => {
+  const [user, setUser] = useState(null);
 
-const SignUp: React.FC<{}> = () => {
-  const [signUpFormValues, setSignUpFormValues] = useState<LoginFormValues>({
-    name: "",
-    email: "",
-    password: "",
-  });
-  const { user, setUser } = useContext(CurrentUserContext);
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8"></div>
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
         <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-          Create an Account
+          Login
         </h2>
       </div>
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
         {/* TODO: this form thing was adding query params to the url. 
         commented it out for now. Password shouldnt be in the query params lol. */}
         {/* <form className="space-y-6"> */}
-        <div>
-          <label
-            htmlFor="name"
-            className="block text-sm font-medium leading-6 text-gray-900"
-          >
-            Name
-          </label>
-          <div className="mt-2">
-            <input
-              id="name"
-              name="name"
-              type="name"
-              autoComplete="email"
-              required
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              onChange={(e) => {
-                setSignUpFormValues({
-                  ...signUpFormValues,
-                  name: e.target.value,
-                });
-              }}
-            />
-          </div>
-        </div>
         <div>
           <label
             htmlFor="email"
@@ -63,12 +32,6 @@ const SignUp: React.FC<{}> = () => {
               autoComplete="email"
               required
               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              onChange={(e) => {
-                setSignUpFormValues({
-                  ...signUpFormValues,
-                  email: e.target.value,
-                });
-              }}
             />
           </div>
         </div>
@@ -78,7 +41,7 @@ const SignUp: React.FC<{}> = () => {
               htmlFor="password"
               className="block text-sm font-medium leading-6 text-gray-900"
             >
-              Create Password
+              Password
             </label>
           </div>
           <div className="mt-2">
@@ -89,32 +52,15 @@ const SignUp: React.FC<{}> = () => {
               autoComplete="current-password"
               required
               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              onChange={(e) => {
-                setSignUpFormValues({
-                  ...signUpFormValues,
-                  password: e.target.value,
-                });
-              }}
             />
           </div>
         </div>
         <div>
           <button
             className="flex w-full justify-center rounded-md bg-purple-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            onClick={async () => {
-              const mockReturnValue = new Promise((resolve, reject) => {
-                // expect the same returned value without the password
-                resolve({
-                  name: signUpFormValues.name,
-                  email: signUpFormValues.email,
-                });
-              });
-              mockReturnValue.then((response) => {
-                setUser(response as { name: string; email: string });
-              });
-            }}
+            onClick={() => {}}
           >
-            Sign up
+            Login
           </button>
         </div>
         {/* </form> */}
@@ -123,4 +69,4 @@ const SignUp: React.FC<{}> = () => {
   );
 };
 
-export default SignUp;
+export default Login;

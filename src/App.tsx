@@ -5,11 +5,12 @@ import Profile from "./Components/Profile";
 import Navbar from "./Components/navbar";
 import Search from "./Components/Search";
 import SignUp from "./Components/SignUp";
+import Login from "./Components/Login";
 
-type User = {
+export interface User {
   name: string;
   email: string;
-};
+}
 
 export const CurrentUserContext = createContext<{
   user: User | null;
@@ -33,6 +34,7 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/search" element={<Search />} />
           <Route path="/sign-up" element={<SignUp />} />
+          <Route path="/login" element={<Login />} />
         </Routes>
       </BrowserRouter>
     </CurrentUserContext.Provider>
