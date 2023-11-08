@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
+import { CurrentUserContext } from "../App";
 
 const Navbar: React.FC = () => {
+  const { user, setUser } = useContext(CurrentUserContext);
   return (
     <nav className="bg-white fixed top-0 w-full shadow-md p-4 flex items-center justify-between">
       <Link
@@ -11,18 +13,23 @@ const Navbar: React.FC = () => {
         Wishy
       </Link>
       <div className="flex space-x-4">
-        <Link
-          to="/sign-up"
-          className="text-lg text-purple-600 hover:text-blue-600"
-        >
-          Sign Up
-        </Link>
-        <Link
-          to="/login"
-          className="text-lg text-purple-600 hover:text-blue-600"
-        >
-          Login
-        </Link>
+        {user == null && (
+          <>
+            <Link
+              to="/sign-up"
+              className="text-lg text-purple-600 hover:text-blue-600"
+            >
+              Sign Up
+            </Link>
+            <Link
+              to="/login"
+              className="text-lg text-purple-600 hover:text-blue-600"
+            >
+              Login
+            </Link>
+          </>
+        )}
+
         <Link
           to="/profile"
           className="text-lg text-purple-600 hover:text-blue-600"

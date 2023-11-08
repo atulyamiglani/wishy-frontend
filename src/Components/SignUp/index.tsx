@@ -1,5 +1,6 @@
 import { useContext, useState } from "react";
 import { CurrentUserContext, User } from "../../App";
+import { Navigate, useNavigate } from "react-router-dom";
 
 interface SignUpFormValues extends User {
   password: string;
@@ -12,6 +13,7 @@ const SignUp: React.FC<{}> = () => {
     password: "",
   });
   const { user, setUser } = useContext(CurrentUserContext);
+  const navigate = useNavigate();
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8"></div>
@@ -111,6 +113,7 @@ const SignUp: React.FC<{}> = () => {
               });
               mockReturnValue.then((response) => {
                 setUser(response as { name: string; email: string });
+                navigate("/home");
               });
             }}
           >
