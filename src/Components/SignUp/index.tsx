@@ -1,12 +1,12 @@
 import { useContext, useState } from "react";
 import { CurrentUserContext, User } from "../../App";
 
-interface LoginFormValues extends User {
+interface SignUpFormValues extends User {
   password: string;
 }
 
 const SignUp: React.FC<{}> = () => {
-  const [signUpFormValues, setSignUpFormValues] = useState<LoginFormValues>({
+  const [signUpFormValues, setSignUpFormValues] = useState<SignUpFormValues>({
     name: "",
     email: "",
     password: "",

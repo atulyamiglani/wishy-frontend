@@ -1,10 +1,7 @@
 import { useContext, useState } from "react";
 import { CurrentUserContext, User } from "../../App";
 
-// copy pasta from sign up
 const Login: React.FC<{}> = () => {
-  const [user, setUser] = useState(null);
-
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8"></div>
