@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { CurrentUserContext } from "../App";
+import SearchBar from "./Search/SearchBar";
 
 const Navbar: React.FC = () => {
   const { user, setUser } = useContext(CurrentUserContext);
@@ -12,6 +13,7 @@ const Navbar: React.FC = () => {
       >
         Wishy
       </Link>
+      <SearchBar />
       <div className="flex space-x-4">
         {user == null && (
           <>
