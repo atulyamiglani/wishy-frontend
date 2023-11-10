@@ -1,11 +1,12 @@
 import React, { createContext, useState } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Home from "./Components/Home";
 import Profile from "./Components/Profile";
 import Navbar from "./Components/navbar";
 import Search from "./Components/Search";
 import SignUp from "./Components/SignUp";
 import Login from "./Components/Login";
+import Editor from "./Components/Profile/editor";
 
 export interface User {
   name: string;
@@ -31,7 +32,8 @@ function App() {
 
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route path="/profile" element={user ? <Profile forCurrentUser={true}/> : <Navigate to="/login"/>}/>
+          <Route path="/profile/:id" element={<Profile forCurrentUser={false}/>}/>
           <Route path="/search" element={<Search />} />
           <Route path="/sign-up" element={<SignUp />} />
           <Route path="/login" element={<Login />} />

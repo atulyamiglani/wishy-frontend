@@ -1,4 +1,7 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+import { BrowserRouter, Link, Route, Routes, useParams } from 'react-router-dom';
+import { CurrentUserContext, User } from '../../App';
+import users from '../../MockDB/users.json';
 
 const Modal: React.FC<{ isWishing: boolean, handleConfirm: () => void, handleCancel: () => void }> = ({ isWishing, handleConfirm, handleCancel }) => {
   const wishingText = "Switching to Gifting mode will allow you to view other people's Wishlists, browse products, and fulfill requests!";
@@ -37,7 +40,6 @@ const Modal: React.FC<{ isWishing: boolean, handleConfirm: () => void, handleCan
 
 const Toggle: React.FC = () => {
   const [isWishing, setIsWishing] = useState(true);
-  const [isLoggedInUser, setIsLoggedInUser] = useState(true);
   const [showModal, setShowModal] = useState(false);
 
   const handleToggle = () => {
@@ -76,30 +78,45 @@ const Card: React.FC<{ number: number, title: string }> = ({ number, title }) =>
   );
 };
 
-const Profile: React.FC = () => {
+const Profile: React.FC<{forCurrentUser: boolean}> = ({forCurrentUser}) => {
+  var name = '';
+  var email = '';
+  const { user, setUser } = useContext(CurrentUserContext);
+  console.log(user);
+  const userId = useParams();
+  console.log(userId);
+  if (forCurrentUser) {
+    name = user?.name || 'placeholder';
+    email = user?.email || 'placeholder';
+  } else {
+    const user = users.find((user) => user.username === userId.id);
+    name = user?.name || 'placeholder2';
+    email = user?.email || 'placeholder2';
+  }
   return (
     <div className='container bg-pink m-auto ps-8 pe-8 pt-8 mb-8 max-w-4xl'>
       {/*Header*/}
       <div className='flex justify-between items-start mb-6'>
         <div>
-          <h1 className='text-5xl font-medium mb-1'>Hunter Groff</h1>
-          <h3 className='text-2xl text-gray-500 font-medium'>@username</h3>
+          <h1 className='text-5xl font-medium mb-1'>{name}</h1>
+          <h3 className='text-2xl text-gray-500 font-medium'>@placeholder</h3>
           <h4></h4>
         </div>
-        <Toggle />
+        {forCurrentUser && (<Toggle />)}
       </div>
 
 
       {/* Personal Info */}
-      <div className='mb-8'>
-        <p className='w-20 inline-block font-bold'>Email:</p>
-        <p className='inline-block mb-2'>huntergroff22@gmail.com</p>
-        <br/>
-        <p className='w-20 inline-block font-bold'>Phone #:</p>
-        <p className='inline-block mb-2'>802-598-8758</p>
-        <br/>
-        <button className='underline text-gray-500'>Edit Profile</button>
-      </div>
+      {forCurrentUser && (
+        <div className='mb-8'>
+          <p className='w-20 inline-block font-bold mb-3'>Email:</p>
+          <p className='inline-block'>{email}</p>
+          <br />
+          <p className='w-20 inline-block font-bold mb-3'>Phone #:</p>
+          <p className='inline-block'>placeholder</p>
+          <br />
+          <Link to='edit' className='underline text-gray-500'>Edit Profile</Link>
+        </div>)}
 
       <hr />
 
@@ -112,7 +129,6 @@ const Profile: React.FC = () => {
           <Card number={2} title='Followers' />
         </div>
       </div>
-
     </div>
   );
 };
