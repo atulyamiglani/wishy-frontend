@@ -34,6 +34,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/profile" element={user ? <Profile forCurrentUser={true}/> : <Navigate to="/login"/>}/>
           <Route path="/profile/:id" element={<Profile forCurrentUser={false}/>}/>
+          <Route path="/profile/edit" element={user ? <Editor /> : <Navigate to="/login"/>}/>
           <Route path="/search" element={<Search />} />
           <Route path="/sign-up" element={<SignUp />} />
           <Route path="/login" element={<Login />} />
