@@ -3,14 +3,14 @@ import { CurrentUserContext, User } from "../../App";
 import { Navigate, useNavigate } from "react-router-dom";
 
 interface LoginFormValues {
-  email: string;
+  username: string;
   password: string;
 }
 
 const Login: React.FC<{}> = () => {
   const { user, setUser } = useContext(CurrentUserContext);
   const [loginValues, setLoginValues] = useState<LoginFormValues>({
-    email: "",
+    username: "",
     password: "",
   });
   const navigate = useNavigate();
@@ -31,18 +31,18 @@ const Login: React.FC<{}> = () => {
             htmlFor="email"
             className="block text-sm font-medium leading-6 text-gray-900"
           >
-            Email address
+            Username
           </label>
           <div className="mt-2">
             <input
               id="email"
               name="email"
-              type="email"
+              type="string"
               autoComplete="email"
               required
               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               onChange={(e) => {
-                setLoginValues({ ...loginValues, email: e.target.value });
+                setLoginValues({ ...loginValues, username: e.target.value });
               }}
             />
           </div>
@@ -82,7 +82,7 @@ const Login: React.FC<{}> = () => {
                 // TODO: we'll decide whether we want the backend to send an
                 // auth token so that we dont store the password locally
                 // and send it with every post
-                setUser(value as { name: string; email: string });
+                setUser(value as User);
                 navigate("/home");
               });
             }}

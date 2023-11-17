@@ -9,8 +9,30 @@ import Login from "./Components/Login";
 import Editor from "./Components/Profile/editor";
 
 export interface User {
-  name: string;
+  firstName: string;
+  lastName: string;
+  username: string;
   email: string;
+  phone: string;
+  isWishing: boolean;
+}
+
+export interface ProductInfo {
+  title: string;
+  link: string;
+  tcin: string;
+  featureBullets: string[];
+  rating: number;
+  ratingsTotal: number;
+  mainImage: string;
+  price: number;
+}
+
+export interface Wishlist {
+  wid: string; //unique id
+  title: string;
+  productIds: string[];
+  owner: string;
 }
 
 export const CurrentUserContext = createContext<{
@@ -28,13 +50,12 @@ function App() {
         <Navbar />
 
         {/* This is to make sure the navbar doesn't overlap the content */}
-        <div className="h-16"></div>
+        <div className="h-20"></div>
 
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/profile" element={user ? <Profile forCurrentUser={true}/> : <Navigate to="/login"/>}/>
           <Route path="/profile/:id" element={<Profile forCurrentUser={false}/>}/>
-          <Route path="/profile/edit" element={user ? <Editor /> : <Navigate to="/login"/>}/>
           <Route path="/search" element={<Search />} />
           <Route path="/sign-up" element={<SignUp />} />
           <Route path="/login" element={<Login />} />
