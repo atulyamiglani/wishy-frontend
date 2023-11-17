@@ -113,7 +113,7 @@ const Home: React.FC = () => {
       <h1>Home</h1>
       <div className="flex flex-wrap gap-3 m-auto">
         {mockProducts.map((product) => (
-          <ProductCard key={product.tcin} product={product} />
+          <ProductCard key={product.tcin} product={product} wishlists={wishlists} setWishlists={setWishlists} />
         ))}
       </div>
     </div>
