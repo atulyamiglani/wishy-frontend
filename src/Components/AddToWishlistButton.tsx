@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { ProductInfo, Wishlist } from '../App';
-import { Link } from 'react-router-dom';
-import WishlistModal from './wishlistModal';
+import WishlistModal from './WishlistModal';
 
 interface AddToWishlistButtonProps {
     product: ProductInfo;
@@ -9,6 +8,10 @@ interface AddToWishlistButtonProps {
     setWishlists: React.Dispatch<React.SetStateAction<Wishlist[]>>;
 }
 
+/*
+ * A button that opens a modal to add a product to a wishlist.
+ * Should be presented on a product card or product details page.
+*/
 const AddToWishlistButton: React.FC<AddToWishlistButtonProps> = ({ product, wishlists, setWishlists }) => {
     const [modalOpen, setModalOpen] = useState(false);
 

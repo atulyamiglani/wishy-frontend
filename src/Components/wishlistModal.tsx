@@ -9,6 +9,10 @@ interface WishlistModalProps {
     handleSubmit: (wishlists: Wishlist[]) => void;
 }
 
+/*
+ * A modal to add a product to a wishlist.
+ * Should be presented on a product card or product details page.
+ */
 const WishlistModal: React.FC<WishlistModalProps> = ({ product, wishlists, handleCancel, handleSubmit }) => {
     const [updatedWishlists, setUpdatedWishlists] = useState<Wishlist[]>([...wishlists]);
 

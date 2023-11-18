@@ -9,6 +9,9 @@ interface ProductCardProps {
     setWishlists?: React.Dispatch<React.SetStateAction<Wishlist[]>>;
 }
 
+/* 
+ * A card showing a product's details.
+*/ 
 const ProductCard: React.FC<ProductCardProps> = ({ product, wishlists, setWishlists }) => {
     return (
         <div className="w-60 border-2 bg-white border border-gray-200 rounded-lg shadow hover:border-purple-600 p-5">
