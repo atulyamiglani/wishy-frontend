@@ -19,10 +19,10 @@ const WishlistModal: React.FC<WishlistModalProps> = ({ product, wishlists, handl
     const toggleProductInWishlist = (wishlist: Wishlist, productId: string) => {
         const newWishlist = { ...wishlist };
 
-        if (newWishlist.productIds.includes(productId)) {
-            newWishlist.productIds = newWishlist.productIds.filter((id) => id !== productId);
+        if (newWishlist.productInfos.some((w) => w.productId === productId)) {
+            newWishlist.productInfos = newWishlist.productInfos.filter((w) => w.productId !== productId);
         } else {
-            newWishlist.productIds = [...newWishlist.productIds, productId];
+            newWishlist.productInfos = [...newWishlist.productInfos, { productId, buyerId: null }];
         }
         const newWishlists = [...updatedWishlists.map((w) => w.wid === newWishlist.wid ? newWishlist : w)];
         setUpdatedWishlists(newWishlists);
@@ -61,11 +61,11 @@ const WishlistModal: React.FC<WishlistModalProps> = ({ product, wishlists, handl
                                     {updatedWishlists.map((w) => (
                                         <button
                                             key={w.wid}
-                                            className={`flex justify-between items-center w-full rounded-lg p-2 hover:bg-teal-200 ${w.productIds.includes(product.tcin) && 'bg-teal-100'} `}
+                                            className={`flex justify-between items-center w-full rounded-lg p-2 hover:bg-teal-200 ${w.productInfos.some((w) => w.productId === product.tcin) && 'bg-teal-100'} `}
                                             onClick={() => { toggleProductInWishlist(w, product.tcin); }}
                                         >
                                             {w.title}
-                                            {w.productIds.includes(product.tcin) && <FaCheck />}
+                                            {w.productInfos.some((w) => w.productId === product.tcin) && <FaCheck />}
                                         </button>
                                     ))}
                                 </div>

@@ -7,6 +7,7 @@ import Search from "./Components/Search";
 import SignUp from "./Components/SignUp";
 import Login from "./Components/Login";
 import Editor from "./Components/Profile/editor";
+import WishlistView from "./Components/Wishlist";
 
 export interface User {
   firstName: string;
@@ -28,11 +29,16 @@ export interface ProductInfo {
   price: number;
 }
 
+export interface WishlistProductInfo {
+  productId: string;
+  buyerId: string | null;
+}
+
 export interface Wishlist {
   wid: string; //unique id
   title: string;
-  productIds: string[];
-  owner: string;
+  productInfos: WishlistProductInfo[]; //product tcins and buyer ids
+  owner: string; //owner id
 }
 
 export const CurrentUserContext = createContext<{
@@ -50,7 +56,7 @@ function App() {
         <Navbar />
 
         {/* This is to make sure the navbar doesn't overlap the content */}
-        <div className="h-20"></div>
+        <div className="h-24"></div>
 
         <Routes>
           <Route path="/" element={<Home />} />
@@ -59,6 +65,7 @@ function App() {
           <Route path="/search" element={<Search />} />
           <Route path="/sign-up" element={<SignUp />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/wishlist/:id" element={<WishlistView />}/>
         </Routes>
       </BrowserRouter>
     </CurrentUserContext.Provider>

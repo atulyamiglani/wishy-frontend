@@ -77,25 +77,25 @@ const Home: React.FC = () => {
           wid: "1",
           title: "My Wishlist",
           owner: user,
-          productIds: ["1"]
+          productInfos: [{productId: "1", buyerId: null}]
         },
         {
           wid: "2",
           title: "My Christmas Wishlist",
           owner: user,
-          productIds: ["2", "3", "4", "6"]
+          productInfos: [{productId: "2", buyerId: null}, {productId: "3", buyerId: null}, {productId: "4", buyerId: null}]
         },
         {
           wid: "3",
           title: "My Birthday Wishlist",
           owner: user,
-          productIds: ["5", "6"]
+          productInfos: [{productId: "5", buyerId: null}, {productId: "1", buyerId: null}]
         },
         {
           wid: "4",
           title: "My Last Wishlist",
           owner: user,
-          productIds: ["1", "4", "6"]
+          productInfos: [{productId: "3", buyerId: null}]
         }]
       );
     });
