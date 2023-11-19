@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 const Editor: React.FC = () => {
   const { user, setUser } = useContext(CurrentUserContext);
-  const [name, setName] = useState(user?.name || "");
+  const [name, setName] = useState(user?.firstName || "");
   const [username, setUsername] = useState("huntergroff");
   const [email, setEmail] = useState(user?.email || "");
   const [phone, setPhone] = useState("1234567890");
@@ -51,7 +51,7 @@ const Editor: React.FC = () => {
         className="justify-center rounded-md bg-purple-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 me-2"
         to="/profile"
         onClick={() => {
-          setUser({ name, email });
+          setUser({ firstName: "", lastName: "", username: "", email: "", phone: "", isWishing: false});
         }}>
           Save Changes
         </Link>

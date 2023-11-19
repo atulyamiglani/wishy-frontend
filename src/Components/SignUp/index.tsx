@@ -3,13 +3,23 @@ import { CurrentUserContext, User } from "../../App";
 import { Navigate, useNavigate } from "react-router-dom";
 
 interface SignUpFormValues extends User {
+  firstName: string;
+  lastName: string;
+  username: string;
+  email: string;
+  phone: string;
+  isWishing: boolean;
   password: string;
 }
 
 const SignUp: React.FC<{}> = () => {
   const [signUpFormValues, setSignUpFormValues] = useState<SignUpFormValues>({
-    name: "",
+    firstName: "",
+    lastName: "",
+    username: "",
     email: "",
+    phone: "",
+    isWishing: false,
     password: "",
   });
   const { user, setUser } = useContext(CurrentUserContext);
@@ -44,7 +54,7 @@ const SignUp: React.FC<{}> = () => {
               onChange={(e) => {
                 setSignUpFormValues({
                   ...signUpFormValues,
-                  name: e.target.value,
+                  firstName: e.target.value,
                 });
               }}
             />
@@ -107,12 +117,16 @@ const SignUp: React.FC<{}> = () => {
               const mockReturnValue = new Promise((resolve, reject) => {
                 // expect the same value returned without the password
                 resolve({
-                  name: signUpFormValues.name,
+                  firstName: signUpFormValues.firstName,
+                  lastName: signUpFormValues.lastName,
+                  username: signUpFormValues.username,
                   email: signUpFormValues.email,
+                  phone: signUpFormValues.phone,
+                  defaultToWishing: signUpFormValues.isWishing,
                 });
               });
               mockReturnValue.then((response) => {
-                setUser(response as { name: string; email: string });
+                setUser(response as User);
                 navigate("/home");
               });
             }}

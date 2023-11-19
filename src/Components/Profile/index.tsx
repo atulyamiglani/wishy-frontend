@@ -86,7 +86,7 @@ const Profile: React.FC<{forCurrentUser: boolean}> = ({forCurrentUser}) => {
   const userId = useParams();
   console.log(userId);
   if (forCurrentUser) {
-    name = user?.name || 'placeholder';
+    name = user?.firstName || 'placeholder';
     email = user?.email || 'placeholder';
   } else {
     const user = users.find((user) => user.username === userId.id);
