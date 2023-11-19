@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import ProductCard from "../ProductCard";
+import ProductCard from "../ProdCard";
 import { CurrentUserContext, ProductInfo, Wishlist } from "../../App";
 
 const mockProducts: ProductInfo[] = [
