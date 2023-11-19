@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ProductInfo, Wishlist } from '../App';
-import WishlistModal from './WishlistModal';
+import WishlistModal from './AddToWishlistModal';
 
 interface AddToWishlistButtonProps {
     product: ProductInfo;
