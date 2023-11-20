@@ -85,9 +85,7 @@ const Search: React.FC = () => {
 
   useEffect(() => {
     if (searchTerm != null) {
-      console.log("fetching products");
       fetchProducts(searchTerm).then((res) => {
-        console.log("resolving products", products);
         setProducts(res);
       });
     }
