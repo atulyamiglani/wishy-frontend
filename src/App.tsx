@@ -1,4 +1,4 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useState, useEffect } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Home from "./Components/Home";
 import Profile from "./Components/Profile";
@@ -49,6 +49,17 @@ export const CurrentUserContext = createContext<{
 
 function App() {
   const [user, setUser] = useState<null | User>(null);
+  const myUser: User = {
+    firstName: "John",
+    lastName: "Doe",
+    username: "johndoe",
+    email: "john@john.com",
+    phone: "1234567890",
+    isWishing: false
+  }
+  useEffect(() => {
+    setUser(myUser);
+  }, []);
 
   return (
     <CurrentUserContext.Provider value={{ user, setUser }}>

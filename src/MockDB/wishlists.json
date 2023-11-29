@@ -6,11 +6,11 @@
         "productInfos": [
             {
                 "productId": "1",
-                "buyerId": null
+                "buyerId": "johndoe"
             },
             {
                 "productId": "2",
-                "buyerId": null
+                "buyerId": "jane"
             },
             {
                 "productId": "3",
@@ -41,6 +41,6 @@
                 "buyerId": null
             }
         ],
-        "owner": "jason"
+        "owner": "johndoe"
     }
 ]

@@ -6,6 +6,7 @@ import ProductRemoveButton from "./ProductRemoveButton";
 import { useState, useEffect } from "react";
 import mockWishlists from "../../MockDB/wishlists.json";
 import mockProducts from "../../MockDB/products.json";
+import BuyingButton from "./BuyingButton";
 
 const WishlistView: React.FC = () => {
   //get wishlist
@@ -33,7 +34,7 @@ const WishlistView: React.FC = () => {
   //get viewing state
   const { user } = React.useContext(CurrentUserContext);
   let showRemoveButton = user && wishlist.owner === user.username; //requires a logged in user
-  let showBuyButton = user && !showRemoveButton && !user.isWishing; //requires a logged in user in gifting mode who is not the owner of the list
+  let showBuyButton = true; //user && !showRemoveButton && !user.isWishing; //requires a logged in user in gifting mode who is not the owner of the list
 
   return (
     <div className="container m-auto">
@@ -62,11 +63,13 @@ const WishlistView: React.FC = () => {
               key={product.tcin}
               product={product}
               bottomContent={
-                showRemoveButton && (
+                showRemoveButton ? (
                   <ProductRemoveButton
                     productId={product.tcin}
                     onRemove={() => {}}
                   />
+                ) : showBuyButton && (
+                  <BuyingButton productInfo={wishlist.productInfos.find((info) => info.productId === product.tcin) || null}/>
                 )
               }
             />
