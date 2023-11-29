@@ -1,0 +1,46 @@
+[
+    {
+        "wid": "1",
+        "title": "Hunter's Wishlist",
+        "description": "This is my wishlist",
+        "productInfos": [
+            {
+                "productId": "1",
+                "buyerId": null
+            },
+            {
+                "productId": "2",
+                "buyerId": null
+            },
+            {
+                "productId": "3",
+                "buyerId": null
+            }
+        ],
+        "owner": "hunter"
+    },
+    {
+        "wid": "2",
+        "title": "Hunter's Christmas List",
+        "description": "This is a list of things I want for Christmas! Thanks for buying things for me and making me a very happy boy! I am going to continue writing things that have no meaning because I want to test what this looks like with long enough text! Thanks homies and dudettes!",
+        "productInfos": [
+            {
+                "productId": "3",
+                "buyerId": null
+            },
+            {
+                "productId": "4",
+                "buyerId": null
+            },
+            {
+                "productId": "5",
+                "buyerId": null
+            },
+            {
+                "productId": "6",
+                "buyerId": null
+            }
+        ],
+        "owner": "jason"
+    }
+]

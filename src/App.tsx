@@ -37,6 +37,7 @@ export interface WishlistProductInfo {
 export interface Wishlist {
   wid: string; //unique id
   title: string;
+  description: string;
   productInfos: WishlistProductInfo[]; //product tcins and buyer ids
   owner: string; //owner id
 }
@@ -65,7 +66,7 @@ function App() {
           <Route path="/search" element={<Search />} />
           <Route path="/sign-up" element={<SignUp />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/wishlist/:id" element={<WishlistView />}/>
+          <Route path="/wishlist/:wishlistId" element={<WishlistView />}/>
         </Routes>
       </BrowserRouter>
     </CurrentUserContext.Provider>

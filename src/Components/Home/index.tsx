@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import ProductCard from "../ProductCard";
 import { CurrentUserContext, ProductInfo, Wishlist } from "../../App";
+import AddToWishlistButton from "../AddToWishlistButton";
 
 const mockProducts: ProductInfo[] = [
   {
@@ -113,7 +114,7 @@ const Home: React.FC = () => {
       <h1>Home</h1>
       <div className="flex flex-wrap gap-3 m-auto">
         {mockProducts.map((product) => (
-          <ProductCard key={product.tcin} product={product} wishlists={wishlists} setWishlists={setWishlists} />
+          <ProductCard key={product.tcin} product={product} bottomContent={<AddToWishlistButton product={product} wishlists={wishlists} setWishlists={setWishlists} />}/>
         ))}
       </div>
     </div>
