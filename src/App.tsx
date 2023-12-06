@@ -49,17 +49,6 @@ export const CurrentUserContext = createContext<{
 
 function App() {
   const [user, setUser] = useState<null | User>(null);
-  const myUser: User = {
-    firstName: "John",
-    lastName: "Doe",
-    username: "johndoe",
-    email: "john@john.com",
-    phone: "1234567890",
-    isWishing: false
-  }
-  useEffect(() => {
-    setUser(myUser);
-  }, []);
 
   return (
     <CurrentUserContext.Provider value={{ user, setUser }}>
@@ -68,7 +57,7 @@ function App() {
         <Navbar />
 
         {/* This is to make sure the navbar doesn't overlap the content */}
-        <div className="h-24"></div>
+        <div className="h-20"></div>
 
         <Routes>
           <Route path="/" element={<Home />} />
