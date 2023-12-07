@@ -83,7 +83,7 @@ const Login: React.FC<{}> = () => {
                 // auth token so that we dont store the password locally
                 // and send it with every post
                 setUser(value as User);
-                navigate("/home");
+                navigate("/");
               });
             }}
           >

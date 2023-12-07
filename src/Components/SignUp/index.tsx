@@ -127,7 +127,7 @@ const SignUp: React.FC<{}> = () => {
               });
               mockReturnValue.then((response) => {
                 setUser(response as User);
-                navigate("/home");
+                navigate("/");
               });
             }}
           >
