@@ -2,11 +2,11 @@ import React from "react";
 import { ProductInfo, Wishlist } from "../App";
 import { Link } from "react-router-dom";
 import AddToWishlistButton from "./AddToWishlistButton";
+import { ReactNode } from "react";
 
 interface ProductCardProps {
   product: ProductInfo;
-  wishlists?: Wishlist[];
-  setWishlists?: React.Dispatch<React.SetStateAction<Wishlist[]>>;
+  bottomContent?: ReactNode;
 }
 
 /*
@@ -14,8 +14,7 @@ interface ProductCardProps {
  */
 const ProductCard: React.FC<ProductCardProps> = ({
   product,
-  wishlists,
-  setWishlists,
+  bottomContent,
 }) => {
   return (
     <div className="w-60 border-2 bg-white border border-gray-200 rounded-lg shadow hover:border-purple-600 p-5">
@@ -26,13 +25,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
         </h5>
         <h2 className="mb-2">${product.price}</h2>
       </Link>
-      {wishlists && setWishlists && (
-        <AddToWishlistButton
-          product={product}
-          wishlists={wishlists}
-          setWishlists={setWishlists}
-        />
-      )}
+      {bottomContent}
     </div>
   );
 };

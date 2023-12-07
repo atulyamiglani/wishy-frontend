@@ -1,4 +1,4 @@
-// import { FaCheck } from "react-icons/fa";
+import { FaCheck } from "react-icons/fa";
 import { ProductInfo, Wishlist } from "../App";
 import React, { useState } from "react";
 
@@ -26,13 +26,17 @@ const WishlistModal: React.FC<WishlistModalProps> = ({
   const toggleProductInWishlist = (wishlist: Wishlist, productId: string) => {
     const newWishlist = { ...wishlist };
 
-    if (newWishlist.productIds.includes(productId)) {
-      newWishlist.productIds = newWishlist.productIds.filter(
-        (id) => id !== productId
+    if (newWishlist.productInfos.some((w) => w.productId === productId)) {
+      newWishlist.productInfos = newWishlist.productInfos.filter(
+        (w) => w.productId !== productId
       );
     } else {
-      newWishlist.productIds = [...newWishlist.productIds, productId];
+      newWishlist.productInfos = [
+        ...newWishlist.productInfos,
+        { productId, buyerId: null },
+      ];
     }
+
     const newWishlists = [
       ...updatedWishlists.map((w) =>
         w.wid === newWishlist.wid ? newWishlist : w
@@ -70,7 +74,7 @@ const WishlistModal: React.FC<WishlistModalProps> = ({
                   <img
                     className="mb-2 me-3 w-40 rounded-t-lg"
                     src={product.mainImage}
-                    alt=""
+                    alt={product.title}
                   />
                   <div>
                     <h2 className="tracking-tight text-gray-900 line-clamp-3 mb-1">
@@ -91,14 +95,18 @@ const WishlistModal: React.FC<WishlistModalProps> = ({
                     <button
                       key={w.wid}
                       className={`flex justify-between items-center w-full rounded-lg p-2 hover:bg-teal-200 ${
-                        w.productIds.includes(product.tcin) && "bg-teal-100"
+                        w.productInfos.some(
+                          (w) => w.productId === product.tcin
+                        ) && "bg-teal-100"
                       } `}
                       onClick={() => {
                         toggleProductInWishlist(w, product.tcin);
                       }}
                     >
                       {w.title}
-                      {/* {w.productIds.includes(product.tcin) && <FaCheck />} */}
+                      {w.productInfos.some(
+                        (w) => w.productId === product.tcin
+                      ) && <FaCheck />}
                     </button>
                   ))}
                 </div>
