@@ -19,6 +19,7 @@ const Navbar: React.FC = () => {
         Wishy
       </Link>
       <SearchBar />
+
       <div className="flex space-x-4">
         {user == null && (
           <>
@@ -43,7 +44,7 @@ const Navbar: React.FC = () => {
           Search
         </Link>
 
-        {user &&
+        {user && (
           <>
             <Link
               to="/profile"
@@ -51,8 +52,14 @@ const Navbar: React.FC = () => {
             >
               Profile
             </Link>
-            <button className="text-lg text-purple-600 hover:text-blue-600" onClick={handleLogout}>Log Out</button>
-          </>}
+            <button
+              className="text-lg text-purple-600 hover:text-blue-600"
+              onClick={handleLogout}
+            >
+              Log Out
+            </button>
+          </>
+        )}
       </div>
     </nav>
   );
