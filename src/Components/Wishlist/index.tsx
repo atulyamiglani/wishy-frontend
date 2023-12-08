@@ -51,9 +51,7 @@ const WishlistView: React.FC = () => {
       </div>
       <hr />
       <p className="text-lg italic mt-4 mb-4">Last Updated 11/19/23</p>
-      <p className="text-lg mb-4">
-        {wishlist.description}
-      </p>
+      <p className="text-lg mb-4">{wishlist.description}</p>
 
       {/*Products*/}
       <div className="container m-auto">
@@ -68,8 +66,16 @@ const WishlistView: React.FC = () => {
                     productId={product.tcin}
                     onRemove={() => {}}
                   />
-                ) : showBuyButton && (
-                  <BuyingButton productInfo={wishlist.productInfos.find((info) => info.productId === product.tcin) || null}/>
+                ) : (
+                  showBuyButton && (
+                    <BuyingButton
+                      productInfo={
+                        wishlist.productInfos.find(
+                          (info) => info.productId === product.tcin
+                        ) || null
+                      }
+                    />
+                  )
                 )
               }
             />

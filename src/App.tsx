@@ -8,6 +8,7 @@ import SignUp from "./Components/SignUp";
 import Login from "./Components/Login";
 import Editor from "./Components/Profile/editor";
 import WishlistView from "./Components/Wishlist";
+import ProductsDetails from "./Components/ProductDetails";
 
 export interface User {
   firstName: string;
@@ -78,7 +79,8 @@ function App() {
           <Route path="/search" element={<Search />} />
           <Route path="/sign-up" element={<SignUp />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/wishlist/:wishlistId" element={<WishlistView />}/>
+          <Route path="/wishlist/:wishlistId" element={<WishlistView />} />
+          <Route path="/details/:productId" element={<ProductsDetails />} />
         </Routes>
       </BrowserRouter>
     </CurrentUserContext.Provider>
