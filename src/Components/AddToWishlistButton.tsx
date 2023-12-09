@@ -12,9 +12,17 @@ interface AddToWishlistButtonProps {
  * A button that opens a modal to add a product to a wishlist.
  * Should be presented on a product card or product details page.
  */
+<<<<<<< HEAD
 const AddToWishlistButton: React.FC<
   AddToWishlistButtonProps & React.AllHTMLAttributes<HTMLDivElement>
 > = ({ product, wishlists, setWishlists }) => {
+=======
+const AddToWishlistButton: React.FC<AddToWishlistButtonProps> = ({
+  product,
+  wishlists,
+  setWishlists,
+}) => {
+>>>>>>> main
   const [modalOpen, setModalOpen] = useState(false);
 
   const handleCancel = () => {
@@ -28,7 +36,10 @@ const AddToWishlistButton: React.FC<
 
   const countWishlistsIncludingProduct = (productId: string) => {
     let count = 0;
+<<<<<<< HEAD
     console.log(wishlists);
+=======
+>>>>>>> main
     wishlists.forEach((w) => {
       if (w.productInfos.some((p) => p.productId === productId)) count++;
     });

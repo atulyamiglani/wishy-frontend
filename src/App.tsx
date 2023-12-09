@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Home from "./Components/Home";
 import Profile from "./Components/Profile";
@@ -6,7 +6,6 @@ import Navbar from "./Components/navbar";
 import Search from "./Components/Search";
 import SignUp from "./Components/SignUp";
 import Login from "./Components/Login";
-import Editor from "./Components/Profile/editor";
 import WishlistView from "./Components/Wishlist";
 import ProductsDetails from "./Components/ProductDetails";
 
@@ -41,6 +40,8 @@ export interface Wishlist {
   description: string;
   productInfos: WishlistProductInfo[]; //product tcins and buyer ids
   owner: string; //owner id
+  created: string;
+  lastUpdated: string;
 }
 
 export const CurrentUserContext = createContext<{
@@ -80,7 +81,10 @@ function App() {
           <Route path="/sign-up" element={<SignUp />} />
           <Route path="/login" element={<Login />} />
           <Route path="/wishlist/:wishlistId" element={<WishlistView />} />
+<<<<<<< HEAD
           <Route path="/details/:productId" element={<ProductsDetails />} />
+=======
+>>>>>>> main
         </Routes>
       </BrowserRouter>
     </CurrentUserContext.Provider>
