@@ -81,6 +81,7 @@ function App() {
           <Route path="/sign-up" element={<SignUp />} />
           <Route path="/login" element={<Login />} />
           <Route path="/wishlist/:wishlistId" element={<WishlistView />} />
+          <Route path="/details/:productId" element={<ProductsDetails />} />
         </Routes>
       </BrowserRouter>
     </CurrentUserContext.Provider>

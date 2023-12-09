@@ -47,6 +47,10 @@ const ProductsDetails: React.FC = () => {
   const { productId } = useParams();
 
   const fetchProduct = (id: string) => {
+    console.log(
+      "product",
+      mockedProducts.find((product) => product.tcin === id)
+    );
     return mockedProducts.find((product) => product.tcin === id);
   };
 
@@ -78,7 +82,7 @@ const ProductsDetails: React.FC = () => {
           </button>
         </div>
         <div className="col-span-1">
-          <h1 className="flex items-center text-5xl font-extrabold dark:text-white">
+          <h1 className="flex items-center text-5xl font-extrabold">
             {product.title}
           </h1>
 
