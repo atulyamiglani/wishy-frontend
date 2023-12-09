@@ -1,17 +1,50 @@
 [
   {
-    "name": "John Doe",
+    "firstName": "John",
+    "lastName": "Doe",
     "username": "johndoe",
-    "email": "johndoe@example.com"
+    "phone": "1234567890",
+    "email": "johndoe@example.com",
+    "isWishing": true
   },
   {
-    "name": "Jane Smith",
-    "username": "janesmith",
-    "email": "janesmith@example.com"
+    "firstName": "Jane",
+    "lastName": "Doe",
+    "username": "janedoe",
+    "phone": "1112223333",
+    "email": "janesmith@example.com",
+    "isWishing": false
   },
   {
-    "name": "Bob Johnson",
+    "firstName": "Bob",
+    "lastName": "Johnson",
     "username": "bobjohnson",
-    "email": "bobjohnson@example.com"
+    "phone": "4445556666",
+    "email": "bobjohnson@example.com",
+    "isWishing": true
+  },
+  {
+    "firstName": "Sally",
+    "lastName": "Williams",
+    "username": "sallywilliams",
+    "phone": "7778889999",
+    "email": "sallywilliams@gmail.com",
+    "isWishing": false
+  },
+  {
+    "firstName": "Mike",
+    "lastName": "Brown",
+    "username": "mikebrown",
+    "phone": "1234567890",
+    "email": "mb@gm.com",
+    "isWishing": true
+  },
+  {
+    "firstName": "hunter",
+    "lastName": "g",
+    "username": "hunter",
+    "email": "b",
+    "phone": "d",
+    "isWishing": true
   }
 ]

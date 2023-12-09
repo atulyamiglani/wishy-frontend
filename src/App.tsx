@@ -40,6 +40,8 @@ export interface Wishlist {
   description: string;
   productInfos: WishlistProductInfo[]; //product tcins and buyer ids
   owner: string; //owner id
+  created: string;
+  lastUpdated: string;
 }
 
 export const CurrentUserContext = createContext<{
@@ -48,7 +50,14 @@ export const CurrentUserContext = createContext<{
 }>({ user: null, setUser: () => {} });
 
 function App() {
-  const [user, setUser] = useState<null | User>(null);
+  const [user, setUser] = useState<null | User>({
+    firstName: "hunter",
+    lastName: "g",
+    username: "hunter",
+    email: "b",
+    phone: "d",
+    isWishing: true,
+  });
 
   return (
     <CurrentUserContext.Provider value={{ user, setUser }}>
@@ -78,7 +87,7 @@ function App() {
           <Route path="/search" element={<Search />} />
           <Route path="/sign-up" element={<SignUp />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/wishlist/:wishlistId" element={<WishlistView />}/>
+          <Route path="/wishlist/:wishlistId" element={<WishlistView />} />
         </Routes>
       </BrowserRouter>
     </CurrentUserContext.Provider>
