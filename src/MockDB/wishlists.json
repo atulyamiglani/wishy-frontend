@@ -17,13 +17,6 @@
         "buyerId": null
       }
     ],
-<<<<<<< HEAD
-    "owner": "hunter"
-  },
-  {
-    "wid": "2",
-    "title": "Hunter's Christmas List",
-=======
     "owner": "hunter",
     "created": "11/12/2023",
     "lastUpdated": "11/23/2023"
@@ -31,7 +24,6 @@
   {
     "wid": "2",
     "title": "John's Christmas List",
->>>>>>> main
     "description": "This is a list of things I want for Christmas! Thanks for buying things for me and making me a very happy boy! I am going to continue writing things that have no meaning because I want to test what this looks like with long enough text! Thanks homies and dudettes!",
     "productInfos": [
       {
@@ -51,12 +43,8 @@
         "buyerId": null
       }
     ],
-<<<<<<< HEAD
-    "owner": "johndoe"
-=======
     "owner": "johndoe",
     "created": "9/22/2023",
     "lastUpdated": "9/24/2023"
->>>>>>> main
   }
 ]
