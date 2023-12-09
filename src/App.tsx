@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Home from "./Components/Home";
 import Profile from "./Components/Profile";
@@ -6,7 +6,6 @@ import Navbar from "./Components/navbar";
 import Search from "./Components/Search";
 import SignUp from "./Components/SignUp";
 import Login from "./Components/Login";
-import Editor from "./Components/Profile/editor";
 import WishlistView from "./Components/Wishlist";
 
 export interface User {
@@ -50,14 +49,7 @@ export const CurrentUserContext = createContext<{
 }>({ user: null, setUser: () => {} });
 
 function App() {
-  const [user, setUser] = useState<null | User>({
-    firstName: "hunter",
-    lastName: "g",
-    username: "hunter",
-    email: "b",
-    phone: "d",
-    isWishing: true,
-  });
+  const [user, setUser] = useState<null | User>(null);
 
   return (
     <CurrentUserContext.Provider value={{ user, setUser }}>

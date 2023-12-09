@@ -1,8 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import mockWishlists from "../../MockDB/wishlists.json";
-import { CurrentUserContext, Wishlist } from "../../App";
-import { useContext, useState } from "react";
+import { Wishlist } from "../../App";
 
 interface ProfileWishlistsProps {
   wishlists: Wishlist[];
@@ -23,8 +21,8 @@ const ProfileWishlists: React.FC<ProfileWishlistsProps> = ({ wishlists }) => {
     <div>
       <hr />
       {wishlists!.map((wishlist) => (
-        <>
-          <Link to={`/wishlist/${wishlist.wid}`}>
+        <div key={wishlist.wid}>
+          <Link key={wishlist.wid} to={`/wishlist/${wishlist.wid}`}>
             <div className="hover:bg-purple-300">
               <h1 className="pt-3">{wishlist.title}</h1>
               <p className="italic mb-2">Created {wishlist.created}</p>
@@ -33,7 +31,7 @@ const ProfileWishlists: React.FC<ProfileWishlistsProps> = ({ wishlists }) => {
             </div>
           </Link>
           <hr />
-        </>
+        </div>
       ))}
     </div>
   );

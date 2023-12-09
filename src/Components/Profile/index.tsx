@@ -9,8 +9,7 @@ import { Wishlist } from "../../App";
 import FollowDetails from "./followdetails";
 
 enum ProfileDetails {
-  WishlistsCreated,
-  WishlistsSaved,
+  Wishlists,
   Followers,
   Following,
   None,
@@ -78,8 +77,10 @@ const Modal: React.FC<{
   );
 };
 
-const Toggle: React.FC = () => {
-  const [isWishing, setIsWishing] = useState(true);
+const Toggle: React.FC<{ isWishing: boolean; setIsWishing: () => void }> = ({
+  isWishing,
+  setIsWishing,
+}) => {
   const [showModal, setShowModal] = useState(false);
 
   const handleToggle = () => {
@@ -87,12 +88,11 @@ const Toggle: React.FC = () => {
   };
 
   const handleConfirm = () => {
-    setIsWishing(!isWishing);
+    setIsWishing();
     setShowModal(false);
   };
 
   const handleCancel = () => {
-    setIsWishing(isWishing);
     setShowModal(false);
   };
 
@@ -164,7 +164,6 @@ const Profile: React.FC<{ forCurrentUser: boolean }> = ({ forCurrentUser }) => {
     if (forCurrentUser && user) {
       setThisUser(user!);
     } else {
-      console.log("here");
       const userByParams = users.find((u) => u.username === userId.id);
       if (userByParams) {
         setThisUser(userByParams);
@@ -203,6 +202,15 @@ const Profile: React.FC<{ forCurrentUser: boolean }> = ({ forCurrentUser }) => {
     );
   }, [thisUser]);
 
+  //toggle wishing or gifting
+  const toggleIsWishing = () => {
+    const newUser = {
+      ...thisUser,
+    };
+    newUser.isWishing = !newUser.isWishing;
+    setUser(newUser);
+  };
+
   //set up bottom menu
   const [profileDetails, setProfileDetails] = useState(ProfileDetails.None);
 
@@ -219,7 +227,12 @@ const Profile: React.FC<{ forCurrentUser: boolean }> = ({ forCurrentUser }) => {
           </h3>
           <h4></h4>
         </div>
-        {forCurrentUser && <Toggle />}
+        {forCurrentUser && (
+          <Toggle
+            isWishing={thisUser!.isWishing}
+            setIsWishing={toggleIsWishing}
+          />
+        )}
       </div>
 
       {/* Personal Info */}
@@ -243,9 +256,13 @@ const Profile: React.FC<{ forCurrentUser: boolean }> = ({ forCurrentUser }) => {
       <div className="mt-8 mb-8">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           <Card
-            onClick={() => setProfileDetails(ProfileDetails.WishlistsCreated)}
+            onClick={() => setProfileDetails(ProfileDetails.Wishlists)}
             number={wishlists.length}
-            title="Wishlists"
+            title={
+              !thisUser!.isWishing && forCurrentUser
+                ? "Wishlists Saved"
+                : "Wishlists Created"
+            }
           />
           <Card
             onClick={() => setProfileDetails(ProfileDetails.Following)}
@@ -261,7 +278,7 @@ const Profile: React.FC<{ forCurrentUser: boolean }> = ({ forCurrentUser }) => {
       </div>
 
       {/*Bottom Details*/}
-      {profileDetails === ProfileDetails.WishlistsCreated && (
+      {profileDetails === ProfileDetails.Wishlists && (
         <ProfileWishlists wishlists={wishlists} />
       )}
       {profileDetails === ProfileDetails.Following && (

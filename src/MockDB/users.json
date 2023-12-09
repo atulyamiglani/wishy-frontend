@@ -40,11 +40,11 @@
     "isWishing": true
   },
   {
-    "firstName": "hunter",
-    "lastName": "g",
+    "firstName": "Hunter",
+    "lastName": "Groff",
     "username": "hunter",
-    "email": "b",
-    "phone": "d",
+    "email": "hunter@groff.com",
+    "phone": "1234543210",
     "isWishing": true
   }
 ]
