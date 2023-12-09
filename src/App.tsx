@@ -7,6 +7,7 @@ import Search from "./Components/Search";
 import SignUp from "./Components/SignUp";
 import Login from "./Components/Login";
 import WishlistView from "./Components/Wishlist";
+import ProductsDetails from "./Components/ProductDetails";
 
 export interface User {
   firstName: string;
@@ -80,6 +81,7 @@ function App() {
           <Route path="/sign-up" element={<SignUp />} />
           <Route path="/login" element={<Login />} />
           <Route path="/wishlist/:wishlistId" element={<WishlistView />} />
+          <Route path="/details/:productId" element={<ProductsDetails />} />
         </Routes>
       </BrowserRouter>
     </CurrentUserContext.Provider>

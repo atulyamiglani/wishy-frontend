@@ -18,7 +18,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
 }) => {
   return (
     <div className="w-60 border-2 bg-white border border-gray-200 rounded-lg shadow hover:border-purple-600 p-5">
-      <Link to={`/${product.tcin}/details`}>
+      <Link to={`/details/${product.tcin}`}>
         <img className="mb-2 rounded-t-lg" src={product.mainImage} alt="" />
         <h5 className="mb-2 text-lg tracking-tight text-gray-900 line-clamp-3">
           {product.title}
