@@ -1,0 +1,30 @@
+[
+  {
+    "follower": "hunter",
+    "followed": "johndoe"
+  },
+  {
+    "follower": "johndoe",
+    "followed": "hunter"
+  },
+  {
+    "follower": "janedoe",
+    "followed": "johndoe"
+  },
+  {
+    "follower": "sallywilliams",
+    "followed": "hunter"
+  },
+  {
+    "follower": "hunter",
+    "followed": "sallywilliams"
+  },
+  {
+    "follower": "sallywilliams",
+    "followed": "mikebrown"
+  },
+  {
+    "follower": "mikebrown",
+    "followed": "hunter"
+  }
+]
