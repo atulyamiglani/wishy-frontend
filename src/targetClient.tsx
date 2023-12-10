@@ -1,9 +1,11 @@
 import axios from "axios";
 import { ProductInfo } from "./App";
 
+const API_KEY = "6207B8D916BD4F14BEF702D43CAFE494";
+
 const searchForProducts = async (searchTerm: string) => {
   const params = {
-    api_key: "6207B8D916BD4F14BEF702D43CAFE494",
+    api_key: API_KEY,
     search_term: searchTerm,
     type: "search",
   };
@@ -16,8 +18,7 @@ const searchForProducts = async (searchTerm: string) => {
 };
 
 export const search = async (searchTerm: string): Promise<ProductInfo[]> => {
-  const searchProducts: ProductInfo[] = await 
-    searchForProducts(searchTerm)
+  const searchProducts: ProductInfo[] = await searchForProducts(searchTerm)
     .then((res) => {
       //translate response into ProductInfo[]
       const p: ProductInfo[] = [];
@@ -54,17 +55,19 @@ const getProductDetails = async (productId: string) => {
   console.log("here");
   console.log("productId: " + productId);
   const params = {
-    api_key: "6207B8D916BD4F14BEF702D43CAFE494",
+    api_key: API_KEY,
     type: "product",
     tcin: productId,
   };
 
-  const response = await axios.get("https://api.redcircleapi.com/request", {
-    params,
-  }).then((res) => {
-    console.log("inside the then thingy: ", res);
-    return res;
-  });
+  const response = await axios
+    .get("https://api.redcircleapi.com/request", {
+      params,
+    })
+    .then((res) => {
+      console.log("inside the then thingy: ", res);
+      return res;
+    });
   console.log(response);
   return response.data;
 };
@@ -73,7 +76,7 @@ export const product = async (productId: string): Promise<ProductInfo> => {
   console.log("product");
   const productInfo: ProductInfo = await getProductDetails(productId)
     .then((res) => {
-      //translate response into ProductInfo[]
+      //translate response into ProductInfo
       console.log("RESPONSE: ", res);
       const product = res.product;
       const offers = res.offers;
@@ -95,4 +98,4 @@ export const product = async (productId: string): Promise<ProductInfo> => {
       return {} as ProductInfo;
     });
   return productInfo;
-}
+};
