@@ -85,41 +85,11 @@ const Search: React.FC = () => {
 
   //get products based on search term
   const fetchProducts = async (searchTerm: string): Promise<ProductInfo[]> => {
-    const searchProducts: ProductInfo[] = await targetClient
-      .searchForProducts(searchTerm)
-      .then((res) => {
-        //translate response into ProductInfo[]
-        const p: ProductInfo[] = [];
-        if (res.search_results) {
-          const results = res.search_results as any[];
-          results.forEach((result: any) => {
-            if (result.product && result.offers) {
-              const product = result.product;
-              const offers = result.offers;
-              const productInfo: ProductInfo = {
-                title: product.title,
-                link: product.link,
-                tcin: product.tcin,
-                featureBullets: product.feature_bullets,
-                rating: product.rating,
-                ratingsTotal: product.ratings_total,
-                mainImage: product.main_image,
-                price: offers.primary.price,
-              };
-              p.push(productInfo);
-            }
-          });
-        }
-        return p;
-      })
-      .catch((err) => {
-        console.log(err);
-        return [];
-      });
-    return searchProducts;
+    return targetClient.search(searchTerm);
   };
 
   useEffect(() => {
+    console.log("i fire once: searchTerm " + searchTerm);
     if (searchTerm != null) {
       fetchProducts(searchTerm).then((res) => {
         setProducts(res);

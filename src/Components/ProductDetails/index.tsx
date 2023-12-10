@@ -4,7 +4,8 @@ import { mockedProducts } from "../Search";
 import WishlistModal from "../AddToWishlistModal";
 import mockWishlists from "../../MockDB/wishlists.json";
 import AddToWishlistButton from "../AddToWishlistButton";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import * as targetClient from "../../targetClient";
 
 const ratingView = (productRating: number, ratingsTotal: number) => (
   <>
@@ -34,14 +35,20 @@ const ratingView = (productRating: number, ratingsTotal: number) => (
 
 const ProductsDetails: React.FC = () => {
   const { productId } = useParams();
+  const [product, setProduct] = useState<ProductInfo | undefined>(undefined);
 
   const fetchProduct = async (id: string): Promise<ProductInfo> => {
-    console.log(
-      "product",
-      mockedProducts.find((product) => product.tcin === id)
-    );
-    return mockedProducts.find((product) => product.tcin === id);
+    return targetClient.product(id);
   };
+
+  useEffect(() => {
+    console.log("i fire once.");
+    if (productId != null) {
+      fetchProduct(productId).then((res) => {
+        setProduct(res);
+      });
+    }
+  }, [productId]);
 
   // TODO: api call
   const fetchWishlists = () => {
@@ -52,7 +59,6 @@ const ProductsDetails: React.FC = () => {
 
   const navigate = useNavigate();
 
-  const product = productId ? fetchProduct(productId) : undefined;
   if (product === undefined) {
     // TODO: maybe make a fancy 404 page.
     return <>This product no longer exists.</>;
@@ -79,7 +85,7 @@ const ProductsDetails: React.FC = () => {
           {ratingView(product.rating, product.ratingsTotal)}
 
           <ul className="space-y-4 text-left text-gray-500 dark:text-gray-400 pt-4">
-            {product.featureBullets.map((feature: any) => (
+            {product.featureBullets && product.featureBullets.map((feature: any) => (
               <>
                 <li className="flex items-center space-x-3 rtl:space-x-reverse">
                   <svg
