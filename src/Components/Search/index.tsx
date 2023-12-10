@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import { ProductInfo } from "../../App";
 import ProductCard from "../ProductCard";
+import * as targetClient from "../../targetClient";
 
 // todo: remove this
 export const mockedProducts: ProductInfo[] = [
@@ -77,10 +78,45 @@ const Search: React.FC = () => {
   const searchTerm = searchParams.get("q");
   const [products, setProducts] = useState<ProductInfo[]>([]);
 
+  //when search term changes, clear products list to show loading
+  useEffect(() => {
+    setProducts([]);
+  }, [searchTerm]);
+
+  //get products based on search term
   const fetchProducts = async (searchTerm: string): Promise<ProductInfo[]> => {
-    return new Promise((resolve, reject) => {
-      resolve(mockedProducts);
-    });
+    const searchProducts: ProductInfo[] = await targetClient
+      .searchForProducts(searchTerm)
+      .then((res) => {
+        //translate response into ProductInfo[]
+        const p: ProductInfo[] = [];
+        if (res.search_results) {
+          const results = res.search_results as any[];
+          results.forEach((result: any) => {
+            if (result.product && result.offers) {
+              const product = result.product;
+              const offers = result.offers;
+              const productInfo: ProductInfo = {
+                title: product.title,
+                link: product.link,
+                tcin: product.tcin,
+                featureBullets: product.feature_bullets,
+                rating: product.rating,
+                ratingsTotal: product.ratings_total,
+                mainImage: product.main_image,
+                price: offers.primary.price,
+              };
+              p.push(productInfo);
+            }
+          });
+        }
+        return p;
+      })
+      .catch((err) => {
+        console.log(err);
+        return [];
+      });
+    return searchProducts;
   };
 
   useEffect(() => {
@@ -89,7 +125,7 @@ const Search: React.FC = () => {
         setProducts(res);
       });
     }
-  }, []);
+  }, [searchTerm]);
   return (
     <div>
       <h3>Results for {searchTerm}...</h3>
@@ -116,7 +152,7 @@ const Search: React.FC = () => {
       )}
       {(products as ProductInfo[]) && (
         <div className="flex flex-wrap gap-3 m-auto">
-          {mockedProducts.map((product) => (
+          {products.map((product) => (
             <ProductCard key={product.tcin} product={product} />
           ))}
         </div>

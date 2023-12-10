@@ -8,6 +8,26 @@ const Home: React.FC = () => {
   const [wishlists, setWishlists] = useState<Wishlist[]>([]);
   const { user, setUser } = useContext(CurrentUserContext);
 
+  //suggested wishlists
+  //null user, gifting user following 0
+  //get 10 most recently updated wishlists
+
+  //wishlists you follow
+  //gifting user following >0
+  //any wishlists followed by current user
+
+  //wishlists of people you follow
+  //gifting user following >0
+  //get wishlists of people you follow, sorted by date
+
+  //suggested products
+  //null user, wishing user following 0
+  //get our pre-made list of suggested products
+
+  //products in your network
+  //wishing user following >0
+  //get products from wishlists of people you follow
+
   //fetches wishlists for the current user
   const fetchWishlistsForUser = async () => {
     const mockReturnValue = new Promise((resolve, reject) => {
@@ -74,11 +94,13 @@ const Home: React.FC = () => {
             key={product.tcin}
             product={product}
             bottomContent={
-              <AddToWishlistButton
-                product={product}
-                wishlists={wishlists}
-                setWishlists={setWishlists}
-              />
+              user && (
+                <AddToWishlistButton
+                  product={product}
+                  wishlists={wishlists}
+                  setWishlists={setWishlists}
+                />
+              )
             }
           />
         ))}

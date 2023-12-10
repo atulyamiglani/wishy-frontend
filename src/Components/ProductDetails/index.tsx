@@ -6,17 +6,6 @@ import mockWishlists from "../../MockDB/wishlists.json";
 import AddToWishlistButton from "../AddToWishlistButton";
 import { useState } from "react";
 
-// export interface ProductInfo {
-//   title: string;
-//   link: string;
-//   tcin: string;
-//   featureBullets: string[];
-//   rating: number;
-//   ratingsTotal: number;
-//   mainImage: string;
-//   price: number;
-// }
-
 const ratingView = (productRating: number, ratingsTotal: number) => (
   <>
     <div className="flex items-center">
@@ -46,7 +35,7 @@ const ratingView = (productRating: number, ratingsTotal: number) => (
 const ProductsDetails: React.FC = () => {
   const { productId } = useParams();
 
-  const fetchProduct = (id: string) => {
+  const fetchProduct = async (id: string): Promise<ProductInfo> => {
     console.log(
       "product",
       mockedProducts.find((product) => product.tcin === id)
@@ -90,7 +79,7 @@ const ProductsDetails: React.FC = () => {
           {ratingView(product.rating, product.ratingsTotal)}
 
           <ul className="space-y-4 text-left text-gray-500 dark:text-gray-400 pt-4">
-            {product.featureBullets.map((feature) => (
+            {product.featureBullets.map((feature: any) => (
               <>
                 <li className="flex items-center space-x-3 rtl:space-x-reverse">
                   <svg
