@@ -8,6 +8,9 @@ import SignUp from "./Components/SignUp";
 import Login from "./Components/Login";
 import WishlistView from "./Components/Wishlist";
 import ProductsDetails from "./Components/ProductDetails";
+import CreateWishlist from "./Components/Wishlist/CreateWishlist";
+import MyWishlists from "./Components/Wishlist/MyWishlists";
+import SavedWishlists from "./Components/Wishlist/SavedWishlists";
 
 export interface User {
   firstName: string;
@@ -82,6 +85,19 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/wishlist/:wishlistId" element={<WishlistView />} />
           <Route path="/details/:productId" element={<ProductsDetails />} />
+          {/*could update to redirect to a "switch to wishing" page if user is in gifting mode*/}
+          <Route
+            path="/new-wishlist"
+            element={user ? <CreateWishlist /> : <Navigate to="/login" />}
+          />
+          <Route
+            path="/my-wishlists"
+            element={user ? <MyWishlists /> : <Navigate to="/login" />}
+          />
+          <Route
+            path="/saved-wishlists"
+            element={user ? <SavedWishlists /> : <Navigate to="/login" />}
+          />
         </Routes>
       </BrowserRouter>
     </CurrentUserContext.Provider>

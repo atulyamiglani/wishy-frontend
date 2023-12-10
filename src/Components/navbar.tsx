@@ -46,6 +46,22 @@ const Navbar: React.FC = () => {
 
         {user && (
           <>
+            {user.isWishing && (
+              <Link
+                to="my-wishlists"
+                className="text-lg text-purple-600 hover:text-blue-600"
+              >
+                My Wishlists
+              </Link>
+            )}
+            {!user.isWishing && (
+              <Link
+                to="/saved-wishlists"
+                className="text-lg text-purple-600 hover:text-blue-600"
+              >
+                Saved Wishlists
+              </Link>
+            )}
             <Link
               to="/profile"
               className="text-lg text-purple-600 hover:text-blue-600"

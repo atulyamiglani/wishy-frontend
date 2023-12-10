@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Wishlist } from "../../App";
+import wishlistSaves from "../../MockDB/wishlistSaves.json";
 
 interface ProfileWishlistsProps {
   wishlists: Wishlist[];
@@ -8,13 +9,11 @@ interface ProfileWishlistsProps {
 
 const ProfileWishlists: React.FC<ProfileWishlistsProps> = ({ wishlists }) => {
   const countGiftersInList = (wishlist: Wishlist) => {
-    const gifters: string[] = [];
-    wishlist.productInfos.forEach((pi) => {
-      if (pi.buyerId && !gifters.includes(pi.buyerId)) {
-        gifters.push(pi.buyerId);
-      }
-    });
-    return gifters.length;
+    const wid = wishlist.wid;
+    const wishlistSavesInList = wishlistSaves.filter(
+      (wishlistSave) => wishlistSave.wid === wid
+    );
+    return wishlistSavesInList.length;
   };
 
   return (

@@ -5,6 +5,7 @@ import users from "../../MockDB/users.json";
 import ProfileWishlists from "./profilewishlists";
 import mockFollows from "../../MockDB/follows.json";
 import mockWishlists from "../../MockDB/wishlists.json";
+import wishlistSaves from "../../MockDB/wishlistSaves.json";
 import { Wishlist } from "../../App";
 import FollowDetails from "./followdetails";
 
@@ -132,10 +133,13 @@ const Card: React.FC<{
   onClick: () => void;
   number: number;
   title: string;
-}> = ({ number, title, onClick }) => {
+  active: boolean;
+}> = ({ number, title, onClick, active }) => {
   return (
     <button
-      className="bg-white p-4 rounded-lg shadow-lg hover:bg-purple-300"
+      className={`bg-white p-4 rounded-lg shadow-lg hover:bg-purple-300 ${
+        active ? "bg-purple-200 shadow-inner" : ""
+      }`}
       onClick={onClick}
     >
       <div className="text-3xl font-bold mb-2 text-center">{number}</div>
@@ -195,11 +199,23 @@ const Profile: React.FC<{ forCurrentUser: boolean }> = ({ forCurrentUser }) => {
 
   //get wishlists
   const emptyWishlists: Wishlist[] = [];
-  const [wishlists, setWishlists] = useState(emptyWishlists);
+  const [createdWishlists, setCreatedWishlists] = useState(emptyWishlists);
   useEffect(() => {
-    setWishlists(
+    setCreatedWishlists(
       mockWishlists.filter((w: Wishlist) => w.owner === thisUser.username)
     );
+  }, [thisUser]);
+
+  //get saved wishlists
+  const emptySavedWishlists: Wishlist[] = [];
+  const [savedWishlists, setSavedWishlists] = useState(emptySavedWishlists);
+  useEffect(() => {
+    const savedWishlists: Wishlist[] = wishlistSaves
+      .filter((w) => w.saved_by === thisUser.username)
+      .map((w) => {
+        return mockWishlists.find((wishlist) => wishlist.wid === w.wid)!;
+      });
+    setSavedWishlists(savedWishlists);
   }, [thisUser]);
 
   //toggle wishing or gifting
@@ -214,8 +230,13 @@ const Profile: React.FC<{ forCurrentUser: boolean }> = ({ forCurrentUser }) => {
   //set up bottom menu
   const [profileDetails, setProfileDetails] = useState(ProfileDetails.None);
 
+  //determine whether one sees created or saved wishlists
+  //always see created lists of others
+  //see saved lists of self if gifting
+  const seeSaved = !thisUser.isWishing && forCurrentUser;
+
   return (
-    <div className="container bg-pink m-auto ps-8 pe-8 pt-8 mb-8 max-w-4xl">
+    <div className="container m-auto ps-8 pe-8 pt-8 mb-8 max-w-4xl">
       {/*Header*/}
       <div className="flex justify-between items-start mb-6">
         <div>
@@ -234,7 +255,6 @@ const Profile: React.FC<{ forCurrentUser: boolean }> = ({ forCurrentUser }) => {
           />
         )}
       </div>
-
       {/* Personal Info */}
       {forCurrentUser && (
         <div className="mb-8">
@@ -249,37 +269,37 @@ const Profile: React.FC<{ forCurrentUser: boolean }> = ({ forCurrentUser }) => {
           </Link>
         </div>
       )}
-
       <hr />
-
       {/*Cards*/}
       <div className="mt-8 mb-8">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           <Card
             onClick={() => setProfileDetails(ProfileDetails.Wishlists)}
-            number={wishlists.length}
-            title={
-              !thisUser!.isWishing && forCurrentUser
-                ? "Wishlists Saved"
-                : "Wishlists Created"
-            }
+            number={seeSaved ? savedWishlists.length : createdWishlists.length}
+            title={seeSaved ? "Wishlists Saved" : "Wishlists Created"}
+            active={profileDetails === ProfileDetails.Wishlists}
           />
           <Card
             onClick={() => setProfileDetails(ProfileDetails.Following)}
             number={follows.length}
             title="Following"
+            active={profileDetails === ProfileDetails.Following}
           />
           <Card
             onClick={() => setProfileDetails(ProfileDetails.Followers)}
             number={followers.length}
             title="Followers"
+            active={profileDetails === ProfileDetails.Followers}
           />
         </div>
       </div>
 
       {/*Bottom Details*/}
-      {profileDetails === ProfileDetails.Wishlists && (
-        <ProfileWishlists wishlists={wishlists} />
+      {profileDetails === ProfileDetails.Wishlists && !seeSaved && (
+        <ProfileWishlists wishlists={createdWishlists} />
+      )}
+      {profileDetails === ProfileDetails.Wishlists && seeSaved && (
+        <ProfileWishlists wishlists={savedWishlists} />
       )}
       {profileDetails === ProfileDetails.Following && (
         <div>
