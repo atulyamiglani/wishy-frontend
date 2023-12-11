@@ -5,15 +5,15 @@
     "description": "This is my wishlist",
     "productInfos": [
       {
-        "productId": "1",
+        "productId": "88156868",
         "buyerId": "johndoe"
       },
       {
-        "productId": "2",
+        "productId": "81616374",
         "buyerId": "jane"
       },
       {
-        "productId": "3",
+        "productId": "50577487",
         "buyerId": null
       }
     ],
@@ -27,19 +27,19 @@
     "description": "This is a list of things I want for Christmas! Thanks for buying things for me and making me a very happy boy! I am going to continue writing things that have no meaning because I want to test what this looks like with long enough text! Thanks homies and dudettes!",
     "productInfos": [
       {
-        "productId": "3",
+        "productId": "50577487",
         "buyerId": null
       },
       {
-        "productId": "4",
+        "productId": "88156867",
         "buyerId": null
       },
       {
-        "productId": "5",
+        "productId": "88202470",
         "buyerId": null
       },
       {
-        "productId": "6",
+        "productId": "80040117",
         "buyerId": null
       }
     ],

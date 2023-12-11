@@ -1,6 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { ProductInfo, Wishlist } from "../../App";
 import mockWishlists from "../../MockDB/wishlists.json";
+import mockProducts from "../../MockDB/products.json";
 import AddToWishlistButton from "../AddToWishlistButton";
 import { useEffect, useState } from "react";
 import * as targetClient from "../../targetClient";
@@ -39,8 +40,17 @@ const ProductsDetails: React.FC = () => {
 
   useEffect(() => {
     console.log("Fetching Product...");
-    //fetch new product.
-    if (productId != null) {
+
+    //first, check for product in database
+    //todo: replace this with api call to node server
+    const product = mockProducts.find((p) => p.tcin === productId);
+    if (product) {
+      console.log("Found product in database: ", product);
+      setProduct(product);
+
+      //if not found in database, fetch from target api
+    } else if (productId != null) {
+      console.log("Product not found in database. Fetching from Target API.");
       fetchProduct(productId).then((res) => {
         setProduct(res);
       });
