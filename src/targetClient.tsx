@@ -52,8 +52,6 @@ export const search = async (searchTerm: string): Promise<ProductInfo[]> => {
 };
 
 const getProductDetails = async (productId: string) => {
-  console.log("here");
-  console.log("productId: " + productId);
   const params = {
     api_key: API_KEY,
     type: "product",
@@ -65,21 +63,18 @@ const getProductDetails = async (productId: string) => {
       params,
     })
     .then((res) => {
-      console.log("inside the then thingy: ", res);
+      console.log("Response: ", res);
       return res;
     });
-  console.log(response);
   return response.data;
 };
 
 export const product = async (productId: string): Promise<ProductInfo> => {
-  console.log("product");
+  console.log("Fetching Product Details.");
   const productInfo: ProductInfo = await getProductDetails(productId)
     .then((res) => {
       //translate response into ProductInfo
-      console.log("RESPONSE: ", res);
       const product = res.product;
-      const offers = res.offers;
       const productInfo: ProductInfo = {
         title: product.title,
         link: product.link,
@@ -87,15 +82,24 @@ export const product = async (productId: string): Promise<ProductInfo> => {
         featureBullets: product.feature_bullets,
         rating: product.rating,
         ratingsTotal: product.ratings_total,
-        mainImage: product.main_image,
-        price: offers.primary.price,
+        mainImage: product.main_image.link,
+        price: product.buybox_winner.price.value,
       };
-      console.log(productInfo);
+      console.log("Response as ProductInfo Object: ", productInfo);
       return productInfo;
     })
     .catch((err) => {
       console.log(err);
-      return {} as ProductInfo;
+      return {
+        title: "",
+        link: "",
+        tcin: "",
+        featureBullets: [],
+        rating: 0,
+        ratingsTotal: 0,
+        mainImage: "",
+        price: 0,
+      };
     });
   return productInfo;
 };
