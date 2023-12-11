@@ -3,7 +3,6 @@ import ProfileWishlists from "../Profile/profilewishlists";
 import { CurrentUserContext, Wishlist } from "../../App";
 import wishlistSaves from "../../MockDB/wishlistSaves.json";
 import mockWishlists from "../../MockDB/wishlists.json";
-import { Link } from "react-router-dom";
 
 const SavedWishlists: FC = () => {
   const { user, setUser } = useContext(CurrentUserContext);
@@ -18,7 +17,7 @@ const SavedWishlists: FC = () => {
         return mockWishlists.find((wishlist) => wishlist.wid === w.wid)!;
       });
     setWishlists(savedWishlists);
-  });
+  }, []);
 
   return (
     <div className="container m-auto ps-8 pe-8 pt-8 mb-8 max-w-4xl">
