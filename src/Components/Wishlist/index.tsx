@@ -6,6 +6,7 @@ import ProductRemoveButton from "./ProductRemoveButton";
 import { useState, useEffect } from "react";
 import mockWishlists from "../../MockDB/wishlists.json";
 import mockProducts from "../../MockDB/products.json";
+import wishlistSaves from "../../MockDB/wishlistSaves.json";
 import BuyingButton from "./BuyingButton";
 
 const WishlistView: React.FC = () => {
@@ -33,8 +34,19 @@ const WishlistView: React.FC = () => {
 
   //get viewing state
   const { user } = React.useContext(CurrentUserContext);
-  let showRemoveButton = user && wishlist.owner === user.username; //requires a logged in user
-  let showBuyButton = true; //user && !showRemoveButton && !user.isWishing; //requires a logged in user in gifting mode who is not the owner of the list
+  let myWishlist = user && wishlist.owner === user.username; //requires a logged in user
+  let showBuyButton = true; //user && !myWishlist && !user.isWishing; //requires a logged in user in gifting mode who is not the owner of the list
+
+  //get wishlist followers
+  const empty: string[] = [];
+  const [wishlistFollowers, setWishlistFollowers] = useState(empty);
+  const fetchWishlistFollowers = () => {
+    const followers = wishlistSaves
+      .filter((save) => save.wid === wishlistId)
+      .map((save) => save.saved_by);
+    setWishlistFollowers(followers);
+  };
+  useEffect(fetchWishlistFollowers, [wishlist]);
 
   return (
     <div className="container m-auto">
@@ -43,10 +55,21 @@ const WishlistView: React.FC = () => {
       <div className="flex justify-between items-center mb-4">
         <p className="text-2xl font-semibold">by {wishlist.owner}</p>
         <div className="flex items-center">
-          <p className="text-xl font-semibold me-4">12 followers</p>
-          <button className="inline-flex justify-center rounded-md shadow-sm px-3 py-2 bg-amber-600 text-sm font-medium text-white hover:bg-amber-500">
-            Follow this list
-          </button>
+          <p className="text-xl font-semibold me-4">
+            {wishlistFollowers.length} followers
+          </p>
+          {user &&
+            !myWishlist &&
+            !wishlistFollowers.includes(user.username) && (
+              <button className="inline-flex justify-center rounded-md shadow-sm px-3 py-2 bg-amber-600 text-sm font-medium text-white hover:bg-amber-500">
+                Follow this list
+              </button>
+            )}
+          {user && !myWishlist && wishlistFollowers.includes(user.username) && (
+            <button className="inline-flex justify-center rounded-md shadow-sm px-3 py-2 bg-gray-400 text-sm font-medium text-white hover:bg-gray-500">
+              Unfollow this list
+            </button>
+          )}
         </div>
       </div>
       <hr />
@@ -61,7 +84,7 @@ const WishlistView: React.FC = () => {
               key={product.tcin}
               product={product}
               bottomContent={
-                showRemoveButton ? (
+                myWishlist ? (
                   <ProductRemoveButton
                     productId={product.tcin}
                     onRemove={() => {}}

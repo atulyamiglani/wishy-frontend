@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { CurrentUserContext, User } from "../../App";
 import users from "../../MockDB/users.json";
 import ProfileWishlists from "./profilewishlists";
@@ -163,6 +163,14 @@ const Profile: React.FC<{ forCurrentUser: boolean }> = ({ forCurrentUser }) => {
   //params user
   const userId = useParams();
 
+  //if viewing own profile, navigate to personal version
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (userId.id === user?.username) {
+      navigate("/profile");
+    }
+  }, [userId, user]);
+
   //set up user based on whose profile this is
   useEffect(() => {
     if (forCurrentUser && user) {
@@ -218,6 +226,16 @@ const Profile: React.FC<{ forCurrentUser: boolean }> = ({ forCurrentUser }) => {
     setSavedWishlists(savedWishlists);
   }, [thisUser]);
 
+  //get following status
+  const [isFollowing, setIsFollowing] = useState(false);
+  useEffect(() => {
+    setIsFollowing(
+      mockFollows.some(
+        (f) => f.follower === user?.username && f.followed === thisUser.username
+      )
+    );
+  }, [thisUser, user]);
+
   //toggle wishing or gifting
   const toggleIsWishing = () => {
     const newUser = {
@@ -248,11 +266,24 @@ const Profile: React.FC<{ forCurrentUser: boolean }> = ({ forCurrentUser }) => {
           </h3>
           <h4></h4>
         </div>
+        {/*User sees wishing/gifting toggle on their own profile*/}
         {forCurrentUser && (
           <Toggle
             isWishing={thisUser!.isWishing}
             setIsWishing={toggleIsWishing}
           />
+        )}
+        {/*User sees follow button on profiles they don't follow*/}
+        {!forCurrentUser && user && !isFollowing && (
+          <button className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-md">
+            Follow
+          </button>
+        )}
+        {/*User sees unfollow button on profiles they follow*/}
+        {!forCurrentUser && user && isFollowing && (
+          <button className="bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded-md">
+            Unfollow
+          </button>
         )}
       </div>
       {/* Personal Info */}
