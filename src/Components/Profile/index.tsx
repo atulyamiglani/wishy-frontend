@@ -1,9 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { CurrentUserContext, User } from "../../App";
-import users from "../../MockDB/users.json";
 import ProfileWishlists from "./profilewishlists";
-import mockFollows from "../../MockDB/follows.json";
 import mockWishlists from "../../MockDB/wishlists.json";
 import wishlistSaves from "../../MockDB/wishlistSaves.json";
 import { Wishlist } from "../../App";
@@ -192,6 +190,19 @@ const Profile: React.FC<{ forCurrentUser: boolean }> = ({ forCurrentUser }) => {
     }
   }, [forCurrentUser, user, username]);
 
+  //get following status
+  const [isFollowing, setIsFollowing] = useState(false);
+  useEffect(() => {
+    getFollowers(thisUser.username).then((followers) => {
+      if (followers) {
+        const f = followers.map((f) => f.follower);
+        if (user) {
+          setIsFollowing(f.includes(user.username));
+        }
+      }
+    });
+  }, [thisUser, user]);
+
   //get followers
   const emptyFollowers: string[] = [];
   const [followers, setFollowers] = useState(emptyFollowers);
@@ -201,7 +212,7 @@ const Profile: React.FC<{ forCurrentUser: boolean }> = ({ forCurrentUser }) => {
         setFollowers(followers.map((f) => f.follower));
       }
     });
-  }, [thisUser]);
+  }, [thisUser, isFollowing]);
 
   //get follows
   const emptyFollows: string[] = [];
@@ -234,16 +245,6 @@ const Profile: React.FC<{ forCurrentUser: boolean }> = ({ forCurrentUser }) => {
       });
     setSavedWishlists(savedWishlists);
   }, [thisUser]);
-
-  //get following status
-  const [isFollowing, setIsFollowing] = useState(false);
-  useEffect(() => {
-    setIsFollowing(
-      mockFollows.some(
-        (f) => f.follower === user?.username && f.followed === thisUser.username
-      )
-    );
-  }, [thisUser, user]);
 
   //toggle wishing or gifting
   const toggleIsWishing = () => {
@@ -292,6 +293,7 @@ const Profile: React.FC<{ forCurrentUser: boolean }> = ({ forCurrentUser }) => {
               const relation = follow(user.username, thisUser.username);
               relation.then((res) => {
                 console.log(res);
+                setIsFollowing(true);
               });
             }}
           >
@@ -306,6 +308,7 @@ const Profile: React.FC<{ forCurrentUser: boolean }> = ({ forCurrentUser }) => {
               const relation = unfollow(user.username, thisUser.username);
               relation.then((res) => {
                 console.log(res);
+                setIsFollowing(false);
               });
             }}
           >
