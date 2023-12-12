@@ -8,6 +8,14 @@ import mockWishlists from "../../MockDB/wishlists.json";
 import wishlistSaves from "../../MockDB/wishlistSaves.json";
 import { Wishlist } from "../../App";
 import FollowDetails from "./followdetails";
+import SearchBar from "../Search/SearchBar";
+import {
+  follow,
+  getFollowers,
+  getFollowings,
+  getUser,
+  unfollow,
+} from "../../client";
 
 enum ProfileDetails {
   Wishlists,
@@ -156,53 +164,54 @@ const Profile: React.FC<{ forCurrentUser: boolean }> = ({ forCurrentUser }) => {
     lastName: "",
     email: "",
     phone: "",
-    isWishing: true,
+    role: "WISHER",
   });
   //logged in user
   const { user, setUser } = useContext(CurrentUserContext);
   //params user
-  const userId = useParams();
+  const { username } = useParams();
 
   //if viewing own profile, navigate to personal version
   const navigate = useNavigate();
   useEffect(() => {
-    if (userId.id === user?.username) {
+    if (username === user?.username) {
       navigate("/profile");
     }
-  }, [userId, user]);
+  }, [username, user]);
 
   //set up user based on whose profile this is
   useEffect(() => {
     if (forCurrentUser && user) {
       setThisUser(user!);
     } else {
-      const userByParams = users.find((u) => u.username === userId.id);
-      if (userByParams) {
-        setThisUser(userByParams);
-      }
+      if (!username) return;
+      const userByParams = getUser(username);
+      userByParams.then((user) => {
+        setThisUser(user as User);
+      });
     }
-  }, [forCurrentUser, user, userId]);
+  }, [forCurrentUser, user, username]);
 
   //get followers
   const emptyFollowers: string[] = [];
   const [followers, setFollowers] = useState(emptyFollowers);
   useEffect(() => {
-    setFollowers(
-      mockFollows
-        .filter((f) => f.followed === thisUser.username)
-        .map((f) => f.follower)
-    );
+    getFollowers(thisUser.username).then((followers) => {
+      if (followers) {
+        setFollowers(followers.map((f) => f.follower));
+      }
+    });
   }, [thisUser]);
 
   //get follows
   const emptyFollows: string[] = [];
   const [follows, setFollows] = useState(emptyFollows);
   useEffect(() => {
-    setFollows(
-      mockFollows
-        .filter((f) => f.follower === thisUser.username)
-        .map((f) => f.followed)
-    );
+    getFollowings(thisUser.username).then((followers) => {
+      if (followers) {
+        setFollows(followers.map((f) => f.followed));
+      }
+    });
   }, [thisUser]);
 
   //get wishlists
@@ -241,7 +250,7 @@ const Profile: React.FC<{ forCurrentUser: boolean }> = ({ forCurrentUser }) => {
     const newUser = {
       ...thisUser,
     };
-    newUser.isWishing = !newUser.isWishing;
+    newUser.role = newUser.role === "GIFTER" ? "WISHER" : "GIFTER";
     setUser(newUser);
   };
 
@@ -251,7 +260,7 @@ const Profile: React.FC<{ forCurrentUser: boolean }> = ({ forCurrentUser }) => {
   //determine whether one sees created or saved wishlists
   //always see created lists of others
   //see saved lists of self if gifting
-  const seeSaved = !thisUser.isWishing && forCurrentUser;
+  const seeSaved = thisUser.role === "GIFTER" && forCurrentUser;
 
   return (
     <div className="container m-auto ps-8 pe-8 pt-8 mb-8 max-w-4xl">
@@ -269,37 +278,59 @@ const Profile: React.FC<{ forCurrentUser: boolean }> = ({ forCurrentUser }) => {
         {/*User sees wishing/gifting toggle on their own profile*/}
         {forCurrentUser && (
           <Toggle
-            isWishing={thisUser!.isWishing}
+            isWishing={thisUser!.role === "WISHER"}
             setIsWishing={toggleIsWishing}
           />
         )}
         {/*User sees follow button on profiles they don't follow*/}
+
         {!forCurrentUser && user && !isFollowing && (
-          <button className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-md">
+          <button
+            className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-md"
+            onClick={async () => {
+              console.log(user.username, thisUser.username);
+              const relation = follow(user.username, thisUser.username);
+              relation.then((res) => {
+                console.log(res);
+              });
+            }}
+          >
             Follow
           </button>
         )}
         {/*User sees unfollow button on profiles they follow*/}
         {!forCurrentUser && user && isFollowing && (
-          <button className="bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded-md">
+          <button
+            className="bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded-md"
+            onClick={async () => {
+              const relation = unfollow(user.username, thisUser.username);
+              relation.then((res) => {
+                console.log(res);
+              });
+            }}
+          >
             Unfollow
           </button>
         )}
       </div>
       {/* Personal Info */}
       {forCurrentUser && (
-        <div className="mb-8">
-          <p className="w-20 inline-block font-bold mb-3">Email:</p>
-          <p className="inline-block">{thisUser!.email}</p>
-          <br />
-          <p className="w-20 inline-block font-bold mb-3">Phone #:</p>
-          <p className="inline-block">{thisUser!.phone}</p>
-          <br />
-          <Link to="edit" className="underline text-gray-500">
-            Edit Profile
-          </Link>
-        </div>
+        <>
+          <div className="mb-8">
+            <p className="w-20 inline-block font-bold mb-3">Email:</p>
+            <p className="inline-block">{thisUser!.email}</p>
+            <br />
+            <p className="w-20 inline-block font-bold mb-3">Phone #:</p>
+            <p className="inline-block">{thisUser!.phone}</p>
+            <br />
+            <Link to="edit" className="underline text-gray-500">
+              Edit Profile
+            </Link>
+          </div>
+          <SearchBar goToPageLink="people" placeHolder="Find people..." />
+        </>
       )}
+
       <hr />
       {/*Cards*/}
       <div className="mt-8 mb-8">

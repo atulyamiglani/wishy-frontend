@@ -18,7 +18,7 @@ const Navbar: React.FC = () => {
       >
         Wishy
       </Link>
-      <SearchBar />
+      <SearchBar goToPageLink="search" placeHolder="Search for a product..." />
 
       <div className="flex space-x-4">
         {user == null && (
@@ -46,7 +46,7 @@ const Navbar: React.FC = () => {
 
         {user && (
           <>
-            {user.isWishing && (
+            {user.role === "WISHER" && (
               <Link
                 to="my-wishlists"
                 className="text-lg text-purple-600 hover:text-blue-600"
@@ -54,7 +54,7 @@ const Navbar: React.FC = () => {
                 My Wishlists
               </Link>
             )}
-            {!user.isWishing && (
+            {user.role === "GIFTER" && (
               <Link
                 to="/saved-wishlists"
                 className="text-lg text-purple-600 hover:text-blue-600"

@@ -6,6 +6,7 @@ interface FollowProps {
 }
 
 const FollowDetails: React.FC<FollowProps> = ({ follows }) => {
+  console.log(follows);
   return (
     <div>
       {follows.map((follow) => (

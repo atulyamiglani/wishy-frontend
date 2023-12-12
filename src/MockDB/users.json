@@ -5,7 +5,7 @@
     "username": "johndoe",
     "phone": "1234567890",
     "email": "johndoe@example.com",
-    "isWishing": true
+    "role": "WISHER"
   },
   {
     "firstName": "Jane",
@@ -13,7 +13,7 @@
     "username": "janedoe",
     "phone": "1112223333",
     "email": "janesmith@example.com",
-    "isWishing": false
+    "role": "GIFTER"
   },
   {
     "firstName": "Bob",
@@ -21,7 +21,7 @@
     "username": "bobjohnson",
     "phone": "4445556666",
     "email": "bobjohnson@example.com",
-    "isWishing": true
+    "role": "WISHER"
   },
   {
     "firstName": "Sally",
@@ -29,7 +29,7 @@
     "username": "sallywilliams",
     "phone": "7778889999",
     "email": "sallywilliams@gmail.com",
-    "isWishing": false
+    "role": "GIFTER"
   },
   {
     "firstName": "Mike",
@@ -37,7 +37,7 @@
     "username": "mikebrown",
     "phone": "1234567890",
     "email": "mb@gm.com",
-    "isWishing": true
+    "role": "WISHER"
   },
   {
     "firstName": "Hunter",
@@ -45,6 +45,6 @@
     "username": "hunter",
     "email": "hunter@groff.com",
     "phone": "1234543210",
-    "isWishing": true
+    "role": "WISHER"
   }
 ]

@@ -47,17 +47,26 @@ const Editor: React.FC = () => {
           />
           <br />
         </div>
-        <Link 
-        className="justify-center rounded-md bg-purple-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 me-2"
-        to="/profile"
-        onClick={() => {
-          setUser({ firstName: "", lastName: "", username: "", email: "", phone: "", isWishing: false});
-        }}>
+        <Link
+          className="justify-center rounded-md bg-purple-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 me-2"
+          to="/profile"
+          onClick={() => {
+            setUser({
+              firstName: "",
+              lastName: "",
+              username: "",
+              email: "",
+              phone: "",
+              role: "GIFTER",
+            });
+          }}
+        >
           Save Changes
         </Link>
-        <Link 
-        className="justify-center rounded-md bg-gray-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-        to="/profile">
+        <Link
+          className="justify-center rounded-md bg-gray-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          to="/profile"
+        >
           Cancel
         </Link>
       </div>
