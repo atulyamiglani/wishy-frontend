@@ -1,5 +1,5 @@
 import axios from "axios";
-import { User } from "./App";
+import { User, Wishlist } from "./App";
 import { SignUpFormValues } from "./Components/SignUp";
 import { LoginFormValues } from "./Components/Login";
 
@@ -67,4 +67,22 @@ export const getFollowings = async (username: string) => {
   return followings.data as FollowRelation[];
 };
 
-export const createWishlist = async () => {};
+export const createWishlist = async (
+  title: string,
+  description: string,
+  owner: string
+) => {
+  console.log("creating wishlist");
+  const wishlist = await axios.post(`${BACKEND_URL}/wishlists`, {
+    title,
+    description,
+    owner,
+  });
+  return wishlist.data;
+};
+
+export const getWishlist = async (id: string) => {
+  const wishlist = await axios.get(`${BACKEND_URL}/wishlist/${id}`);
+  console.log("Wishlist from axios:", wishlist);
+  return wishlist.data as Wishlist;
+};
