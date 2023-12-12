@@ -1,7 +1,12 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const SearchBar = () => {
+type SearchBarProps = {
+  goToPageLink: string;
+  placeHolder: string;
+};
+
+const SearchBar: React.FC<SearchBarProps> = ({ goToPageLink, placeHolder }) => {
   const [searchTerm, setSearchTerm] = useState<string>("");
 
   const navigate = useNavigate();
@@ -9,7 +14,7 @@ const SearchBar = () => {
     // navigate to search page with search term
     const searchTermQuery = searchTerm.split(" ").join("+");
     if (searchTerm !== "") {
-      navigate(`/search?q=${searchTermQuery}`);
+      navigate(`/${goToPageLink}?q=${searchTermQuery}`);
     }
   };
 
@@ -41,8 +46,8 @@ const SearchBar = () => {
           <input
             type="text"
             id="simple-search"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Search for a product..."
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5"
+            placeholder={placeHolder}
             value={searchTerm}
             onChange={(event) => {
               setSearchTerm(event.target.value);
@@ -59,7 +64,7 @@ const SearchBar = () => {
 
         <button
           type="button"
-          className="p-2.5 ms-2 text-sm font-medium text-white bg-purple-700 rounded-lg border border-purple-700 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 dark:bg-blue-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800"
+          className="p-2.5 ms-2 text-sm font-medium text-white bg-purple-700 rounded-lg border border-purple-700 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300"
           onClick={handleSubmit}
         >
           <svg

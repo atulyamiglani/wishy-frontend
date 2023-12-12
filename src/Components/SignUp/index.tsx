@@ -1,14 +1,15 @@
 import { useContext, useState } from "react";
 import { CurrentUserContext, User } from "../../App";
 import { Navigate, useNavigate } from "react-router-dom";
+import { signUp } from "../../client";
 
-interface SignUpFormValues extends User {
+export interface SignUpFormValues extends User {
   firstName: string;
   lastName: string;
   username: string;
   email: string;
   phone: string;
-  isWishing: boolean;
+  role: "GIFTER" | "WISHER";
   password: string;
 }
 
@@ -19,7 +20,7 @@ const SignUp: React.FC<{}> = () => {
     username: "",
     email: "",
     phone: "",
-    isWishing: false,
+    role: "GIFTER",
     password: "",
   });
   const { user, setUser } = useContext(CurrentUserContext);
@@ -165,7 +166,7 @@ const SignUp: React.FC<{}> = () => {
           onChange={(e) => {
             setSignUpFormValues({
               ...signUpFormValues,
-              isWishing: e.target.value === "wishing",
+              role: e.target.value === "wishing" ? "WISHER" : "GIFTER",
             });
           }}
         >
@@ -204,27 +205,16 @@ const SignUp: React.FC<{}> = () => {
             className="flex w-full justify-center rounded-md bg-purple-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             onClick={async () => {
               console.log(signUpFormValues);
-              const mockReturnValue = new Promise((resolve, reject) => {
-                // expect the same value returned without the password
-                resolve({
-                  firstName: signUpFormValues.firstName,
-                  lastName: signUpFormValues.lastName,
-                  username: signUpFormValues.username,
-                  email: signUpFormValues.email,
-                  phone: signUpFormValues.phone,
-                  defaultToWishing: signUpFormValues.isWishing,
-                });
-              });
-              mockReturnValue.then((response) => {
+              const signedUpUser = signUp(signUpFormValues);
+              signedUpUser.then((response) => {
                 setUser(response as User);
-                navigate("/");
+                navigate("/profile");
               });
             }}
           >
             Sign up
           </button>
         </div>
-        {/* </form> */}
       </div>
     </>
   );

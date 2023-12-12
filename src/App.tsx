@@ -11,6 +11,7 @@ import ProductsDetails from "./Components/ProductDetails";
 import CreateWishlist from "./Components/Wishlist/CreateWishlist";
 import MyWishlists from "./Components/Wishlist/MyWishlists";
 import SavedWishlists from "./Components/Wishlist/SavedWishlists";
+import PeopleList from "./Components/People";
 
 export interface User {
   firstName: string;
@@ -18,7 +19,7 @@ export interface User {
   username: string;
   email: string;
   phone: string;
-  isWishing: boolean;
+  role: "WISHER" | "GIFTER";
 }
 
 export interface ProductInfo {
@@ -77,7 +78,7 @@ function App() {
             }
           />
           <Route
-            path="/profile/:id"
+            path="/profile/:username"
             element={<Profile forCurrentUser={false} />}
           />
           <Route path="/search" element={<Search />} />
@@ -97,6 +98,10 @@ function App() {
           <Route
             path="/saved-wishlists"
             element={user ? <SavedWishlists /> : <Navigate to="/login" />}
+          />
+          <Route
+            path="/people"
+            element={user ? <PeopleList /> : <Navigate to="/login" />}
           />
         </Routes>
       </BrowserRouter>
