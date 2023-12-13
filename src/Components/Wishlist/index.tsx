@@ -159,11 +159,16 @@ const WishlistView: React.FC = () => {
   };
 
   return (
-    <div className="container m-auto">
+    <div className="container m-auto mb-5">
       {/*Intro*/}
       <h1 className="text-5xl font-bold mb-2">{wishlist.title}</h1>
       <div className="flex justify-between items-center mb-4">
-        <p className="text-2xl font-semibold">by {wishlist.owner}</p>
+        <Link
+          to={`/profile/${wishlist.owner}`}
+          className="text-2xl font-semibold hover:text-purple-600"
+        >
+          by {wishlist.owner}
+        </Link>
         <div className="flex items-center">
           <p className="text-xl font-semibold me-4">
             {wishlistFollowers.length} followers
@@ -175,7 +180,7 @@ const WishlistView: React.FC = () => {
                 onClick={followWishlistHandler}
                 className="inline-flex justify-center rounded-md shadow-sm px-3 py-2 bg-amber-600 text-sm font-medium text-white hover:bg-amber-500"
               >
-                Follow this list
+                Save this list
               </button>
             )}
           {user && !myWishlist && wishlistFollowers.includes(user.username) && (
@@ -183,7 +188,7 @@ const WishlistView: React.FC = () => {
               onClick={unfollowWishlistHandler}
               className="inline-flex justify-center rounded-md shadow-sm px-3 py-2 bg-gray-400 text-sm font-medium text-white hover:bg-gray-500"
             >
-              Unfollow this list
+              Unsave this list
             </button>
           )}
         </div>

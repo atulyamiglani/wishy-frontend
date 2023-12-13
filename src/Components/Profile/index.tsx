@@ -143,8 +143,8 @@ const Card: React.FC<{
 }> = ({ number, title, onClick, active }) => {
   return (
     <button
-      className={`bg-white p-4 rounded-lg shadow-lg hover:bg-purple-300 ${
-        active ? "bg-purple-200 shadow-inner" : ""
+      className={`p-4 rounded-lg hover:bg-purple-300 ${
+        active ? "bg-purple-200 shadow-inner" : "bg-white shadow-lg"
       }`}
       onClick={onClick}
     >
