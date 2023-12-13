@@ -145,7 +145,6 @@ export const updateUser = async (user: User) => {
   return updatedUser.data;
 };
 
-<<<<<<< HEAD
 export const getFeedNoUser = async () => {
   const popularProducts = await axios.get(`${BACKEND_URL}/home`);
   return popularProducts.data as ProductInfo[];
@@ -157,7 +156,8 @@ export const getFeed = async (user: User) => {
     return feed.data as Wishlist[];
   } else {
     return feed.data as ProductInfo[];
-=======
+  }
+};
 export const updateWishlist = async (wishlist: Wishlist) => {
   console.log("updating wishlist", wishlist);
   const updatedWishlist = await axios.put(
@@ -182,6 +182,5 @@ export const getProduct = async (id: string) => {
     console.log("ERROR");
     console.log(error);
     return null;
->>>>>>> origin/main
   }
 };

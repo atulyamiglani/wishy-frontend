@@ -106,6 +106,11 @@ const Home: React.FC = () => {
             }
           />
         ))}
+        {products.length === 0 && user?.role === "WISHER" && (
+          <>
+            <h2>Follow more friends to see what they are wishing for!</h2>
+          </>
+        )}
         {user?.role === "GIFTER" && (
           <>
             <h1>See what your friends are wishing for... </h1>
