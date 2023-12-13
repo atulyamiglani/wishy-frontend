@@ -2,7 +2,6 @@ import axios from "axios";
 import { User, Wishlist } from "./App";
 import { SignUpFormValues } from "./Components/SignUp";
 import { LoginFormValues } from "./Components/Login";
-import { get } from "http";
 
 const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:4000";
 
@@ -142,4 +141,13 @@ export const getWishlistFollowers = async (wishlistId: string) => {
   );
   console.log("followers data", followers.data);
   return followers.data as FollowRelation[];
+};
+
+export const updateUser = async (user: User) => {
+  const updatedUser = await axios.put(
+    `${BACKEND_URL}/user/${user.username}`,
+    user
+  );
+  console.log("updated user", updatedUser);
+  return updatedUser.data;
 };
