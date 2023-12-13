@@ -1,7 +1,7 @@
 import React from "react";
 import { CurrentUserContext, ProductInfo, Wishlist } from "../../App";
 import ProductCard from "../ProductCard";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import ProductRemoveButton from "./ProductRemoveButton";
 import { useState, useEffect } from "react";
 import BuyingButton from "./BuyingButton";
@@ -37,7 +37,6 @@ const WishlistView: React.FC = () => {
       const w = getWishlist(wishlistId);
       w.then((res) => {
         if (res) {
-          console.log("res:", res);
           setWishlist(res);
         }
       });
@@ -54,10 +53,11 @@ const WishlistView: React.FC = () => {
     console.log("fetching products for wishlist: ", wishlist);
     Promise.all(
       wishlist.productInfos.map((info) => {
+        if (info.productId === "") return null;
         return getProduct(info.productId);
       })
     ).then((res) => {
-      console.log("res:", res);
+      console.log("products:", res);
       setProducts(res.filter((p) => p != null) as ProductInfo[]);
     });
   };
@@ -197,32 +197,43 @@ const WishlistView: React.FC = () => {
       {/*Products*/}
       <div className="container m-auto">
         <div className="flex flex-wrap gap-3 m-auto">
-          {products.map((product) => (
-            <ProductCard
-              key={product.tcin}
-              product={product}
-              bottomContent={
-                myWishlist ? (
-                  <ProductRemoveButton
-                    productId={product.tcin}
-                    onRemove={removeProductFromWishlist}
-                  />
-                ) : (
-                  showBuyButton && (
-                    <BuyingButton
-                      productInfo={
-                        wishlist.productInfos.find(
-                          (info) => info.productId === product.tcin
-                        ) || null
-                      }
-                      setProductBuyer={setProductBuyer}
-                      removeProductBuyer={removeProductBuyer}
+          {products.length === 0 && (
+            <>
+              <Link
+                to="/"
+                className="inline-flex justify-center rounded-md shadow-sm px-3 py-2 bg-teal-600 text-sm font-medium text-white hover:bg-teal-500"
+              >
+                Add Products!
+              </Link>
+            </>
+          )}
+          {products.length > 0 &&
+            products.map((product) => (
+              <ProductCard
+                key={product.tcin}
+                product={product}
+                bottomContent={
+                  myWishlist ? (
+                    <ProductRemoveButton
+                      productId={product.tcin}
+                      onRemove={removeProductFromWishlist}
                     />
+                  ) : (
+                    showBuyButton && (
+                      <BuyingButton
+                        productInfo={
+                          wishlist.productInfos.find(
+                            (info) => info.productId === product.tcin
+                          ) || null
+                        }
+                        setProductBuyer={setProductBuyer}
+                        removeProductBuyer={removeProductBuyer}
+                      />
+                    )
                   )
-                )
-              }
-            />
-          ))}
+                }
+              />
+            ))}
         </div>
       </div>
       <div className="flex flex-wrap gap-3 m-auto"></div>
