@@ -12,6 +12,7 @@ import CreateWishlist from "./Components/Wishlist/CreateWishlist";
 import MyWishlists from "./Components/Wishlist/MyWishlists";
 import SavedWishlists from "./Components/Wishlist/SavedWishlists";
 import PeopleList from "./Components/People";
+import Editor from "./Components/Profile/editor";
 
 export interface User {
   firstName: string;
@@ -76,6 +77,10 @@ function App() {
                 <Navigate to="/login" />
               )
             }
+          />
+          <Route
+            path="/profile/edit"
+            element={user ? <Editor /> : <Navigate to="/login" />}
           />
           <Route
             path="/profile/:username"

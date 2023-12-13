@@ -2,14 +2,39 @@ import React from "react";
 import { CurrentUserContext, User } from "../../App";
 import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
+import { updateUser } from "../../client";
+import { useNavigate } from "react-router-dom";
 
 const Editor: React.FC = () => {
   const { user, setUser } = useContext(CurrentUserContext);
-  const [name, setName] = useState(user?.firstName || "");
-  const [username, setUsername] = useState("huntergroff");
+  const [firstName, setFirstName] = useState(user?.firstName || "");
+  const [lastName, setLastName] = useState(user?.lastName || "");
   const [email, setEmail] = useState(user?.email || "");
-  const [phone, setPhone] = useState("1234567890");
+  const [phone, setPhone] = useState(user?.phone || "");
   const [password, setPassword] = useState("");
+
+  const navigate = useNavigate();
+
+  const handleSubmit = async () => {
+    if (user) {
+      const newUser = {
+        firstName: firstName,
+        lastName: lastName,
+        username: user!.username,
+        email: email,
+        phone: phone,
+        password: password,
+        role: user!.role,
+      };
+      await updateUser(newUser).then((res) => {
+        if (res) {
+          console.log("Setting user: ", res);
+          setUser(res);
+        }
+      });
+      navigate("/profile");
+    }
+  };
 
   return (
     <div>
@@ -18,48 +43,59 @@ const Editor: React.FC = () => {
         <div className="flex justify-between items-start">
           <div>
             <input
-              className="text-4xl font-medium border border-gray-300 rounded-md p-2 leading-tight focus:outline-none focus:border-blue-500 mb-2"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              className="w-72 text-4xl font-medium border border-gray-300 rounded-md p-2 leading-tight focus:outline-none focus:border-blue-500 mb-2"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+              placeholder="First Name"
+            />
+            <input
+              className="w-72 ms-2 text-4xl font-medium border border-gray-300 rounded-md p-2 leading-tight focus:outline-none focus:border-blue-500 mb-2"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+              placeholder="Last Name"
             />
             <br />
-            <input
-              className="text-xl text-gray-500 font-medium border border-gray-300 rounded-md p-2 leading-tight focus:outline-none focus:border-blue-500 mb-2"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            />
+            <h2 className="mb-4 font-bold">@{user!.username}</h2>
           </div>
         </div>
 
         <div className="mb-8">
-          <p className="w-20 inline-block font-bold">Email:</p>
+          <label htmlFor="email" className="w-32 inline-block font-bold">
+            Email:
+          </label>
           <input
             className="border border-gray-300 rounded-md p-2 leading-tight focus:outline-none focus:border-blue-500 w-96 mb-2"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            id="email"
           />
           <br />
-          <p className="w-20 inline-block font-bold">Phone #:</p>
+          <label htmlFor="phone" className="w-32 inline-block font-bold">
+            Phone #:
+          </label>
           <input
             className="border border-gray-300 rounded-md p-2 leading-tight focus:outline-none focus:border-blue-500 w-96 mb-2"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
+            id="phone"
+          />
+          <br />
+          <label htmlFor="password" className="w-32 inline-block font-bold">
+            New Password:
+          </label>
+          <input
+            className="border border-gray-300 rounded-md p-2 leading-tight focus:outline-none focus:border-blue-500 w-96 mb-2"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            id="password"
           />
           <br />
         </div>
+        {/* todo: add safety check for username */}
         <Link
           className="justify-center rounded-md bg-purple-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 me-2"
           to="/profile"
-          onClick={() => {
-            setUser({
-              firstName: "",
-              lastName: "",
-              username: "",
-              email: "",
-              phone: "",
-              role: "GIFTER",
-            });
-          }}
+          onClick={handleSubmit}
         >
           Save Changes
         </Link>
