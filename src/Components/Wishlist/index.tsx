@@ -4,15 +4,14 @@ import ProductCard from "../ProductCard";
 import { useNavigate, useParams } from "react-router-dom";
 import ProductRemoveButton from "./ProductRemoveButton";
 import { useState, useEffect } from "react";
-import mockProducts from "../../MockDB/products.json";
 import BuyingButton from "./BuyingButton";
 import {
   getWishlist,
   followWishlist,
   unfollowWishlist,
   getWishlistFollowers,
+  getProduct,
 } from "../../client";
-import { get } from "http";
 
 const WishlistView: React.FC = () => {
   //get wishlist
@@ -27,6 +26,7 @@ const WishlistView: React.FC = () => {
         buyerId: "",
       },
     ],
+    created: new Date(),
   } as Wishlist;
   const [wishlist, setWishlist] = useState(emptyWishlist);
   const navigate = useNavigate();
@@ -50,18 +50,15 @@ const WishlistView: React.FC = () => {
   //get products
   const [products, setProducts] = useState<ProductInfo[]>([]);
   const fetchProducts = () => {
-    console.log("wishlist: ", wishlist);
-    const productList: ProductInfo[] = [];
-    console.log(wishlist.productInfos);
-    wishlist.productInfos.forEach((productInfo) => {
-      const product = mockProducts.find(
-        (p) => p.tcin === productInfo.productId
-      );
-      if (product) {
-        productList.push(product);
-      }
+    console.log("fetching products for wishlist: ", wishlist);
+    Promise.all(
+      wishlist.productInfos.map((info) => {
+        return getProduct(info.productId);
+      })
+    ).then((res) => {
+      console.log("res:", res);
+      setProducts(res.filter((p) => p != null) as ProductInfo[]);
     });
-    setProducts(productList);
   };
   useEffect(fetchProducts, [wishlist]);
 
@@ -139,7 +136,9 @@ const WishlistView: React.FC = () => {
         </div>
       </div>
       <hr />
-      <p className="text-lg italic mt-4 mb-4">Last Updated 11/19/23</p>
+      <p className="text-lg italic mt-4 mb-4">
+        Created {wishlist.created.toString()}
+      </p>
       <p className="text-lg mb-4">{wishlist.description}</p>
 
       {/*Products*/}

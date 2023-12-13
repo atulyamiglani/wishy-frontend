@@ -1,5 +1,5 @@
 import axios from "axios";
-import { User, Wishlist } from "./App";
+import { ProductInfo, User, Wishlist } from "./App";
 import { SignUpFormValues } from "./Components/SignUp";
 import { LoginFormValues } from "./Components/Login";
 
@@ -152,4 +152,21 @@ export const updateWishlist = async (wishlist: Wishlist) => {
   );
   console.log("updated wishlist", updatedWishlist);
   return updatedWishlist.data;
+};
+
+export const addProduct = async (product: ProductInfo) => {
+  const newProduct = await axios.post(`${BACKEND_URL}/products`, product);
+  console.log("new product", newProduct);
+  return newProduct.data;
+};
+
+export const getProduct = async (id: string) => {
+  try {
+    const product = await axios.get(`${BACKEND_URL}/products/${id}`);
+    return product.data;
+  } catch (error) {
+    console.log("ERROR");
+    console.log(error);
+    return null;
+  }
 };
