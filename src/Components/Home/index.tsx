@@ -3,7 +3,13 @@ import ProductCard from "../ProductCard";
 import { CurrentUserContext, ProductInfo, Wishlist } from "../../App";
 import mockProducts from "../../MockDB/products.json";
 import AddToWishlistButton from "../AddToWishlistButton";
-import { getWishlistsForUser, updateWishlist } from "../../client";
+import {
+  getFeed,
+  getFeedNoUser,
+  getWishlistsForUser,
+  updateWishlist,
+} from "../../client";
+import ProfileWishlists from "../Profile/profilewishlists";
 
 const Home: React.FC = () => {
   const { user, setUser } = useContext(CurrentUserContext);
@@ -29,6 +35,13 @@ const Home: React.FC = () => {
   //get products from wishlists of people you follow
 
   //fetches wishlists for the current user
+  const fetchWishlistsForUser = async () => {
+    if (user) {
+      const wishlists = getWishlistsForUser(user.username).then((wishlists) => {
+        setWishlists(wishlists);
+      });
+    }
+  };
   //get wishlists for user
   const [wishlists, setWishlists] = useState<Wishlist[]>([]);
   useEffect(() => {
@@ -43,7 +56,7 @@ const Home: React.FC = () => {
   const updateWishlists = (newWishlists: Wishlist[]) => {
     const updatedWishlists: Wishlist[] = [];
     newWishlists.forEach((w) => {
-      updateWishlist(w).then((res) => {
+      updateWishlist(w).then((res: Wishlist) => {
         if (res) {
           console.log("Updated wishlist: ", res);
           updatedWishlists.push(res);
@@ -56,14 +69,23 @@ const Home: React.FC = () => {
 
   //fetches products
   const [products, setProducts] = useState<ProductInfo[]>([]);
-  const fetchProducts = () => {
-    const productList: ProductInfo[] = [];
-    mockProducts.forEach((product) => {
-      productList.push(product);
-    });
-    setProducts(productList);
+  const [feedWishlists, setFeedWishlists] = useState<Wishlist[]>([]);
+  const fetchFeed = () => {
+    if (user === null) {
+      getFeedNoUser().then((products: ProductInfo[]) => {
+        setProducts(products);
+      });
+    } else if (user.role === "WISHER") {
+      getFeed(user).then((products) => {
+        setProducts(products as ProductInfo[]);
+      });
+    } else {
+      getFeed(user).then((wishlists) => {
+        setFeedWishlists(wishlists as Wishlist[]);
+      });
+    }
   };
-  useEffect(fetchProducts, []);
+  useEffect(fetchFeed, []);
 
   return (
     <div className="container m-auto">
@@ -84,6 +106,19 @@ const Home: React.FC = () => {
             }
           />
         ))}
+        {products.length === 0 && user?.role === "WISHER" && (
+          <>
+            <h2>Follow more friends to see what they are wishing for!</h2>
+          </>
+        )}
+        {user?.role === "GIFTER" && (
+          <>
+            <h1>See what your friends are wishing for... </h1>
+            <div className="container m-auto ps-8 pe-8 pt-8 mb-8 max-w-4xl">
+              {<ProfileWishlists wishlists={feedWishlists} />}
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
