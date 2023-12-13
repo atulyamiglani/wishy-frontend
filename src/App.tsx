@@ -39,7 +39,7 @@ export interface WishlistProductInfo {
 }
 
 export interface Wishlist {
-  wid: string; //unique id
+  _id: string; //unique id
   title: string;
   description: string;
   productInfos: WishlistProductInfo[]; //product tcins and buyer ids

@@ -1,8 +1,7 @@
 import React, { FC, useContext, useEffect, useState } from "react";
 import ProfileWishlists from "../Profile/profilewishlists";
 import { CurrentUserContext, Wishlist } from "../../App";
-import wishlistSaves from "../../MockDB/wishlistSaves.json";
-import mockWishlists from "../../MockDB/wishlists.json";
+import { getWishlistsFollowedByUser } from "../../client";
 
 const SavedWishlists: FC = () => {
   const { user, setUser } = useContext(CurrentUserContext);
@@ -11,13 +10,16 @@ const SavedWishlists: FC = () => {
   const emptyWishlists: Wishlist[] = [];
   const [wishlists, setWishlists] = useState(emptyWishlists);
   useEffect(() => {
-    const savedWishlists: Wishlist[] = wishlistSaves
-      .filter((w) => w.saved_by === user!.username)
-      .map((w) => {
-        return mockWishlists.find((wishlist) => wishlist.wid === w.wid)!;
+    getWishlistsFollowedByUser(user!.username)
+      .then((wishlists) => {
+        if (wishlists) {
+          setWishlists(wishlists);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
       });
-    setWishlists(savedWishlists);
-  }, []);
+  }, [user]);
 
   return (
     <div className="container m-auto ps-8 pe-8 pt-8 mb-8 max-w-4xl">

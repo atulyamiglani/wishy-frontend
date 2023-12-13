@@ -1,7 +1,8 @@
 import axios from "axios";
-import { User } from "./App";
+import { User, Wishlist } from "./App";
 import { SignUpFormValues } from "./Components/SignUp";
 import { LoginFormValues } from "./Components/Login";
+import { get } from "http";
 
 const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:4000";
 
@@ -67,4 +68,78 @@ export const getFollowings = async (username: string) => {
   return followings.data as FollowRelation[];
 };
 
-export const createWishlist = async () => {};
+export const createWishlist = async (
+  title: string,
+  description: string,
+  owner: string
+) => {
+  console.log("creating wishlist");
+  const wishlist = await axios.post(`${BACKEND_URL}/wishlists`, {
+    title,
+    description,
+    owner,
+  });
+  return wishlist.data;
+};
+
+export const getWishlist = async (id: string) => {
+  const wishlist = await axios.get(`${BACKEND_URL}/wishlist/${id}`);
+  console.log("Wishlist from axios:", wishlist);
+  return wishlist.data as Wishlist;
+};
+
+export const getWishlistsForUser = async (username: string) => {
+  const wishlists = await axios.get(`${BACKEND_URL}/wishlists/${username}`);
+  console.log("Wishlists from axios:", wishlists);
+  return wishlists.data as Wishlist[];
+};
+
+const getWishlistFollowsForUser = async (username: string) => {
+  const wishlistFollows = await axios.get(
+    `${BACKEND_URL}/wishlist/following/${username}`
+  );
+  return wishlistFollows.data;
+};
+
+export const getWishlistsFollowedByUser = async (username: string) => {
+  const wishlistFollows = await axios
+    .get(`${BACKEND_URL}/wishlist/following/${username}`)
+    .then((res) => res.data);
+  console.log("Wishlist follows:", wishlistFollows);
+  const wishlists = await Promise.all(
+    wishlistFollows.map(async (follow: any) => {
+      const wishlist = await getWishlist(follow.wishlistId);
+      return wishlist;
+    })
+  );
+  return wishlists as Wishlist[];
+};
+
+export const followWishlist = async (follower: string, wishlistId: string) => {
+  const followRelation = await axios.post(`${BACKEND_URL}/wishlist/follow`, {
+    follower,
+    wishlistId,
+  });
+  console.log("new follow", followRelation);
+  return followRelation;
+};
+
+export const unfollowWishlist = async (
+  follower: string,
+  wishlistId: string
+) => {
+  const followRelation = await axios.post(`${BACKEND_URL}/wishlist/unfollow`, {
+    follower,
+    wishlistId,
+  });
+  console.log("new unfollow", followRelation);
+  return followRelation;
+};
+
+export const getWishlistFollowers = async (wishlistId: string) => {
+  const followers = await axios.get(
+    `${BACKEND_URL}/wishlist/followers/${wishlistId}`
+  );
+  console.log("followers data", followers.data);
+  return followers.data as FollowRelation[];
+};

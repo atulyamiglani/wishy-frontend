@@ -39,7 +39,7 @@ const WishlistModal: React.FC<WishlistModalProps> = ({
 
     const newWishlists = [
       ...updatedWishlists.map((w) =>
-        w.wid === newWishlist.wid ? newWishlist : w
+        w._id === newWishlist._id ? newWishlist : w
       ),
     ];
     setUpdatedWishlists(newWishlists);
@@ -93,7 +93,7 @@ const WishlistModal: React.FC<WishlistModalProps> = ({
                 >
                   {updatedWishlists.map((w) => (
                     <button
-                      key={w.wid}
+                      key={w._id}
                       className={`flex justify-between items-center w-full rounded-lg p-2 hover:bg-teal-200 ${
                         w.productInfos.some(
                           (w) => w.productId === product.tcin
