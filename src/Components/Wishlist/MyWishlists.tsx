@@ -1,7 +1,7 @@
 import React, { FC, useContext, useEffect, useState } from "react";
 import ProfileWishlists from "../Profile/profilewishlists";
 import { CurrentUserContext, Wishlist } from "../../App";
-import mockWishlists from "../../MockDB/wishlists.json";
+import { getWishlistsForUser } from "../../client";
 import { Link } from "react-router-dom";
 
 const MyWishlists: FC = () => {
@@ -11,9 +11,15 @@ const MyWishlists: FC = () => {
   const emptyWishlists: Wishlist[] = [];
   const [wishlists, setWishlists] = useState(emptyWishlists);
   useEffect(() => {
-    setWishlists(
-      mockWishlists.filter((w: Wishlist) => w.owner === user!.username)
-    );
+    getWishlistsForUser(user!.username)
+      .then((wishlists) => {
+        if (wishlists) {
+          setWishlists(wishlists);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, [user]);
 
   return (

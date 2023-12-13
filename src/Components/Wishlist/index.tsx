@@ -5,9 +5,14 @@ import { useNavigate, useParams } from "react-router-dom";
 import ProductRemoveButton from "./ProductRemoveButton";
 import { useState, useEffect } from "react";
 import mockProducts from "../../MockDB/products.json";
-import wishlistSaves from "../../MockDB/wishlistSaves.json";
 import BuyingButton from "./BuyingButton";
-import { getWishlist } from "../../client";
+import {
+  getWishlist,
+  followWishlist,
+  unfollowWishlist,
+  getWishlistFollowers,
+} from "../../client";
+import { get } from "http";
 
 const WishlistView: React.FC = () => {
   //get wishlist
@@ -69,12 +74,39 @@ const WishlistView: React.FC = () => {
   const empty: string[] = [];
   const [wishlistFollowers, setWishlistFollowers] = useState(empty);
   const fetchWishlistFollowers = () => {
-    const followers = wishlistSaves
-      .filter((save) => save.wid === wishlistId)
-      .map((save) => save.saved_by);
-    setWishlistFollowers(followers);
+    const followers = getWishlistFollowers(wishlist._id);
+    console.log("followers:", followers);
+    followers.then((res) => {
+      if (res) {
+        setWishlistFollowers(res.map((f) => f.follower));
+      }
+    });
   };
   useEffect(fetchWishlistFollowers, [wishlist]);
+
+  //follow wishlist
+  const followWishlistHandler = () => {
+    if (user) {
+      followWishlist(user.username, wishlist._id).then((res) => {
+        console.log("res:", res);
+        fetchWishlistFollowers();
+      });
+    } else {
+      navigate("/login");
+    }
+  };
+
+  //unfollow wishlist
+  const unfollowWishlistHandler = () => {
+    if (user) {
+      unfollowWishlist(user.username, wishlist._id).then((res) => {
+        console.log("res:", res);
+        fetchWishlistFollowers();
+      });
+    } else {
+      navigate("/login");
+    }
+  };
 
   return (
     <div className="container m-auto">
@@ -89,12 +121,18 @@ const WishlistView: React.FC = () => {
           {user &&
             !myWishlist &&
             !wishlistFollowers.includes(user.username) && (
-              <button className="inline-flex justify-center rounded-md shadow-sm px-3 py-2 bg-amber-600 text-sm font-medium text-white hover:bg-amber-500">
+              <button
+                onClick={followWishlistHandler}
+                className="inline-flex justify-center rounded-md shadow-sm px-3 py-2 bg-amber-600 text-sm font-medium text-white hover:bg-amber-500"
+              >
                 Follow this list
               </button>
             )}
           {user && !myWishlist && wishlistFollowers.includes(user.username) && (
-            <button className="inline-flex justify-center rounded-md shadow-sm px-3 py-2 bg-gray-400 text-sm font-medium text-white hover:bg-gray-500">
+            <button
+              onClick={unfollowWishlistHandler}
+              className="inline-flex justify-center rounded-md shadow-sm px-3 py-2 bg-gray-400 text-sm font-medium text-white hover:bg-gray-500"
+            >
               Unfollow this list
             </button>
           )}

@@ -2,8 +2,6 @@ import React, { useContext, useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { CurrentUserContext, User } from "../../App";
 import ProfileWishlists from "./profilewishlists";
-import mockWishlists from "../../MockDB/wishlists.json";
-import wishlistSaves from "../../MockDB/wishlistSaves.json";
 import { Wishlist } from "../../App";
 import FollowDetails from "./followdetails";
 import SearchBar from "../Search/SearchBar";
@@ -13,6 +11,8 @@ import {
   getFollowings,
   getUser,
   unfollow,
+  getWishlistsForUser,
+  getWishlistsFollowedByUser,
 } from "../../client";
 
 enum ProfileDetails {
@@ -229,21 +229,32 @@ const Profile: React.FC<{ forCurrentUser: boolean }> = ({ forCurrentUser }) => {
   const emptyWishlists: Wishlist[] = [];
   const [createdWishlists, setCreatedWishlists] = useState(emptyWishlists);
   useEffect(() => {
-    setCreatedWishlists(
-      mockWishlists.filter((w: Wishlist) => w.owner === thisUser.username)
-    );
+    if (thisUser.username === "") return;
+    getWishlistsForUser(thisUser.username)
+      .then((wishlists) => {
+        if (wishlists) {
+          setCreatedWishlists(wishlists);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, [thisUser]);
 
   //get saved wishlists
   const emptySavedWishlists: Wishlist[] = [];
   const [savedWishlists, setSavedWishlists] = useState(emptySavedWishlists);
   useEffect(() => {
-    const savedWishlists: Wishlist[] = wishlistSaves
-      .filter((w) => w.saved_by === thisUser.username)
-      .map((w) => {
-        return mockWishlists.find((wishlist) => wishlist.wid === w.wid)!;
+    if (thisUser.username === "") return;
+    getWishlistsFollowedByUser(thisUser.username)
+      .then((wishlists) => {
+        if (wishlists) {
+          setSavedWishlists(wishlists);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
       });
-    setSavedWishlists(savedWishlists);
   }, [thisUser]);
 
   //toggle wishing or gifting
