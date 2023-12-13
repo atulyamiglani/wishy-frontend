@@ -1,5 +1,5 @@
 import axios from "axios";
-import { User, Wishlist } from "./App";
+import { ProductInfo, User, Wishlist } from "./App";
 import { SignUpFormValues } from "./Components/SignUp";
 import { LoginFormValues } from "./Components/Login";
 
@@ -150,4 +150,18 @@ export const updateUser = async (user: User) => {
   );
   console.log("updated user", updatedUser);
   return updatedUser.data;
+};
+
+export const getFeedNoUser = async () => {
+  const popularProducts = await axios.get(`${BACKEND_URL}/home`);
+  return popularProducts.data as ProductInfo[];
+};
+
+export const getFeed = async (user: User) => {
+  const feed = await axios.get(`${BACKEND_URL}/home/${user.username}`);
+  if (user.role === "GIFTER") {
+    return feed.data as Wishlist[];
+  } else {
+    return feed.data as ProductInfo[];
+  }
 };

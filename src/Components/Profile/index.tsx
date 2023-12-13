@@ -13,6 +13,7 @@ import {
   unfollow,
   getWishlistsForUser,
   getWishlistsFollowedByUser,
+  updateUser,
 } from "../../client";
 
 enum ProfileDetails {
@@ -258,12 +259,13 @@ const Profile: React.FC<{ forCurrentUser: boolean }> = ({ forCurrentUser }) => {
   }, [thisUser]);
 
   //toggle wishing or gifting
-  const toggleIsWishing = () => {
+  const toggleIsWishing = async () => {
     const newUser = {
       ...thisUser,
     };
     newUser.role = newUser.role === "GIFTER" ? "WISHER" : "GIFTER";
     setUser(newUser);
+    await updateUser(newUser);
   };
 
   //set up bottom menu

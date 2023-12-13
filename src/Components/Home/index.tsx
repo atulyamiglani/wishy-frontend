@@ -3,6 +3,8 @@ import ProductCard from "../ProductCard";
 import { CurrentUserContext, ProductInfo, Wishlist } from "../../App";
 import mockProducts from "../../MockDB/products.json";
 import AddToWishlistButton from "../AddToWishlistButton";
+import { getFeed, getFeedNoUser, getWishlistsForUser } from "../../client";
+import ProfileWishlists from "../Profile/profilewishlists";
 
 const Home: React.FC = () => {
   const [wishlists, setWishlists] = useState<Wishlist[]>([]);
@@ -30,56 +32,32 @@ const Home: React.FC = () => {
 
   //fetches wishlists for the current user
   const fetchWishlistsForUser = async () => {
-    const mockReturnValue = new Promise((resolve, reject) => {
-      resolve([
-        {
-          wid: "1",
-          title: "My Wishlist",
-          owner: user,
-          productInfos: [{ productId: "1", buyerId: null }],
-        },
-        {
-          wid: "2",
-          title: "My Christmas Wishlist",
-          owner: user,
-          productInfos: [
-            { productId: "2", buyerId: null },
-            { productId: "3", buyerId: null },
-            { productId: "4", buyerId: null },
-          ],
-        },
-        {
-          wid: "3",
-          title: "My Birthday Wishlist",
-          owner: user,
-          productInfos: [
-            { productId: "5", buyerId: null },
-            { productId: "1", buyerId: null },
-          ],
-        },
-        {
-          wid: "4",
-          title: "My Last Wishlist",
-          owner: user,
-          productInfos: [{ productId: "3", buyerId: null }],
-        },
-      ]);
-    });
-    mockReturnValue.then((response) => {
-      setWishlists(response as Wishlist[]);
-    });
+    if (user) {
+      const wishlists = getWishlistsForUser(user.username).then((wishlists) => {
+        setWishlists(wishlists);
+      });
+    }
   };
 
   //fetches products
   const [products, setProducts] = useState<ProductInfo[]>([]);
-  const fetchProducts = () => {
-    const productList: ProductInfo[] = [];
-    mockProducts.forEach((product) => {
-      productList.push(product);
-    });
-    setProducts(productList);
+  const [feedWishlists, setFeedWishlists] = useState<Wishlist[]>([]);
+  const fetchFeed = () => {
+    if (user === null) {
+      getFeedNoUser().then((products: ProductInfo[]) => {
+        setProducts(products);
+      });
+    } else if (user.role === "WISHER") {
+      getFeed(user).then((products) => {
+        setProducts(products as ProductInfo[]);
+      });
+    } else {
+      getFeed(user).then((wishlists) => {
+        setFeedWishlists(wishlists as Wishlist[]);
+      });
+    }
   };
-  useEffect(fetchProducts, []);
+  useEffect(fetchFeed, []);
 
   useEffect(() => {
     fetchWishlistsForUser();
@@ -89,21 +67,30 @@ const Home: React.FC = () => {
     <div className="container m-auto">
       <h1>Home</h1>
       <div className="flex flex-wrap gap-3 m-auto">
-        {products.map((product) => (
-          <ProductCard
-            key={product.tcin}
-            product={product}
-            bottomContent={
-              user && (
-                <AddToWishlistButton
-                  product={product}
-                  wishlists={wishlists}
-                  setWishlists={setWishlists}
-                />
-              )
-            }
-          />
-        ))}
+        {products &&
+          products.map((product) => (
+            <ProductCard
+              key={product.tcin}
+              product={product}
+              bottomContent={
+                user && (
+                  <AddToWishlistButton
+                    product={product}
+                    wishlists={wishlists}
+                    setWishlists={setWishlists}
+                  />
+                )
+              }
+            />
+          ))}
+        {user?.role === "GIFTER" && (
+          <>
+            <h1>See what your friends are wishing for... </h1>
+            <div className="container m-auto ps-8 pe-8 pt-8 mb-8 max-w-4xl">
+              {<ProfileWishlists wishlists={feedWishlists} />}
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
