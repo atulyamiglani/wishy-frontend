@@ -1,5 +1,5 @@
 import React from "react";
-import { WishlistProductInfo } from "../../App";
+import { User, WishlistProductInfo } from "../../App";
 import { CurrentUserContext } from "../../App";
 
 const OtherUserBuyingText: React.FC<{ productInfo: WishlistProductInfo }> = ({
@@ -12,31 +12,48 @@ const OtherUserBuyingText: React.FC<{ productInfo: WishlistProductInfo }> = ({
   );
 };
 
-const UserBuyingButton: React.FC<{ productInfo: WishlistProductInfo }> = ({
-  productInfo,
-}) => {
+const UserBuyingButton: React.FC<{
+  productInfo: WishlistProductInfo;
+  removeProductBuyer: (buyerId: string) => void;
+}> = ({ productInfo, removeProductBuyer }) => {
   return (
     <>
       <p className="text-gray-500 text-sm mb-1">I'm buying this!</p>
-      <button className="inline-flex justify-center rounded-md shadow-sm px-3 py-2 bg-gray-400 text-sm font-medium text-white hover:bg-gray-300">
+      <button
+        onClick={() => removeProductBuyer(productInfo.productId)}
+        className="inline-flex justify-center rounded-md shadow-sm px-3 py-2 bg-gray-400 text-sm font-medium text-white hover:bg-gray-300"
+      >
         Cancel
       </button>
     </>
   );
 };
 
-const BuyableButton: React.FC<{ productInfo: WishlistProductInfo }> = ({
-  productInfo,
-}) => {
+const BuyableButton: React.FC<{
+  productInfo: WishlistProductInfo;
+  setProductBuyer: (productId: string, buyerId: string) => void;
+  user: User;
+}> = ({ productInfo, setProductBuyer, user }) => {
   return (
-    <button className="inline-flex justify-center mb-1 rounded-md shadow-sm px-3 py-2 bg-amber-600 text-sm font-medium text-white hover:bg-amber-500">
+    <button
+      onClick={() => setProductBuyer(productInfo.productId, user.username)}
+      className="inline-flex justify-center mb-1 rounded-md shadow-sm px-3 py-2 bg-amber-600 text-sm font-medium text-white hover:bg-amber-500"
+    >
       I'll buy this!
     </button>
   );
 };
 
-const BuyingButton: React.FC<{ productInfo: WishlistProductInfo | null }> = ({
+interface BuyingButtonProps {
+  productInfo: WishlistProductInfo | null;
+  setProductBuyer: (productId: string, buyerId: string) => void;
+  removeProductBuyer: (productId: string) => void;
+}
+
+const BuyingButton: React.FC<BuyingButtonProps> = ({
   productInfo,
+  setProductBuyer,
+  removeProductBuyer,
 }) => {
   enum ProductState {
     BUYABLE,
@@ -67,13 +84,20 @@ const BuyingButton: React.FC<{ productInfo: WishlistProductInfo | null }> = ({
   return (
     <>
       {productState === ProductState.BUYABLE && (
-        <BuyableButton productInfo={productInfo!} />
+        <BuyableButton
+          productInfo={productInfo!}
+          setProductBuyer={setProductBuyer}
+          user={user!}
+        />
       )}
       {productState === ProductState.BOUGHT_BY_OTHER && (
         <OtherUserBuyingText productInfo={productInfo!} />
       )}
       {productState === ProductState.BOUGHT_BY_USER && (
-        <UserBuyingButton productInfo={productInfo!} />
+        <UserBuyingButton
+          productInfo={productInfo!}
+          removeProductBuyer={removeProductBuyer}
+        />
       )}
     </>
   );

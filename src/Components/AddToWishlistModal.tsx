@@ -1,6 +1,7 @@
 import { FaCheck } from "react-icons/fa";
 import { ProductInfo, Wishlist } from "../App";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { getProduct, addProduct } from "../client";
 
 interface WishlistModalProps {
   product: ProductInfo;
@@ -22,6 +23,28 @@ const WishlistModal: React.FC<WishlistModalProps> = ({
   const [updatedWishlists, setUpdatedWishlists] = useState<Wishlist[]>([
     ...wishlists,
   ]);
+
+  //adds the product to the database if it does not already exist there.
+  const addProductToDB = async () => {
+    console.log("Getting product from DB: ", product);
+    const res = await getProduct(product.tcin).then((res) => {
+      if (res) {
+        console.log("Product found in DB: ", res);
+        return res;
+      } else {
+        console.log("Product not found in DB. Adding...");
+        return addProduct(product).then((res) => {
+          console.log("Product added to DB: ", res);
+          return res;
+        });
+      }
+    });
+  };
+
+  useEffect(() => {
+    console.log("Add product to database...");
+    addProductToDB();
+  }, []);
 
   const toggleProductInWishlist = (wishlist: Wishlist, productId: string) => {
     const newWishlist = { ...wishlist };

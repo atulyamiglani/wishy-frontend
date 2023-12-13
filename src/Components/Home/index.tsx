@@ -3,11 +3,15 @@ import ProductCard from "../ProductCard";
 import { CurrentUserContext, ProductInfo, Wishlist } from "../../App";
 import mockProducts from "../../MockDB/products.json";
 import AddToWishlistButton from "../AddToWishlistButton";
-import { getFeed, getFeedNoUser, getWishlistsForUser } from "../../client";
+import {
+  getFeed,
+  getFeedNoUser,
+  getWishlistsForUser,
+  updateWishlist,
+} from "../../client";
 import ProfileWishlists from "../Profile/profilewishlists";
 
 const Home: React.FC = () => {
-  const [wishlists, setWishlists] = useState<Wishlist[]>([]);
   const { user, setUser } = useContext(CurrentUserContext);
 
   //suggested wishlists
@@ -38,6 +42,30 @@ const Home: React.FC = () => {
       });
     }
   };
+  //get wishlists for user
+  const [wishlists, setWishlists] = useState<Wishlist[]>([]);
+  useEffect(() => {
+    if (user) {
+      getWishlistsForUser(user!.username).then((res) => {
+        setWishlists(res);
+      });
+    }
+  }, [user]);
+
+  //update wishlists for user
+  const updateWishlists = (newWishlists: Wishlist[]) => {
+    const updatedWishlists: Wishlist[] = [];
+    newWishlists.forEach((w) => {
+      updateWishlist(w).then((res: Wishlist) => {
+        if (res) {
+          console.log("Updated wishlist: ", res);
+          updatedWishlists.push(res);
+        }
+      });
+    });
+    console.log("Updated wishlists: ", updatedWishlists);
+    setWishlists(newWishlists);
+  };
 
   //fetches products
   const [products, setProducts] = useState<ProductInfo[]>([]);
@@ -59,30 +87,25 @@ const Home: React.FC = () => {
   };
   useEffect(fetchFeed, []);
 
-  useEffect(() => {
-    fetchWishlistsForUser();
-  }, []);
-
   return (
     <div className="container m-auto">
       <h1>Home</h1>
       <div className="flex flex-wrap gap-3 m-auto">
-        {products &&
-          products.map((product) => (
-            <ProductCard
-              key={product.tcin}
-              product={product}
-              bottomContent={
-                user && (
-                  <AddToWishlistButton
-                    product={product}
-                    wishlists={wishlists}
-                    setWishlists={setWishlists}
-                  />
-                )
-              }
-            />
-          ))}
+        {products.map((product) => (
+          <ProductCard
+            key={product.tcin}
+            product={product}
+            bottomContent={
+              user && (
+                <AddToWishlistButton
+                  product={product}
+                  wishlists={wishlists}
+                  updateWishlists={updateWishlists}
+                />
+              )
+            }
+          />
+        ))}
         {user?.role === "GIFTER" && (
           <>
             <h1>See what your friends are wishing for... </h1>

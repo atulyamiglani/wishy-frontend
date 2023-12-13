@@ -20,36 +20,30 @@ const Navbar: React.FC = () => {
       </Link>
       <SearchBar goToPageLink="search" placeHolder="Search for a product..." />
 
-      <div className="flex space-x-4">
+      <div className="flex space-x-5">
         {user == null && (
           <>
             <Link
               to="/sign-up"
-              className="text-lg text-purple-600 hover:text-blue-600"
+              className="text-lg font-bold text-purple-600 hover:text-blue-600"
             >
               Sign Up
             </Link>
             <Link
               to="/login"
-              className="text-lg text-purple-600 hover:text-blue-600"
+              className="text-lg font-bold text-purple-600 hover:text-blue-600"
             >
               Login
             </Link>
           </>
         )}
-        <Link
-          to="/search"
-          className="text-lg text-purple-600 hover:text-blue-600"
-        >
-          Search
-        </Link>
 
         {user && (
           <>
             {user.role === "WISHER" && (
               <Link
                 to="my-wishlists"
-                className="text-lg text-purple-600 hover:text-blue-600"
+                className="text-lg font-bold text-purple-600 hover:text-blue-600"
               >
                 My Wishlists
               </Link>
@@ -57,19 +51,19 @@ const Navbar: React.FC = () => {
             {user.role === "GIFTER" && (
               <Link
                 to="/saved-wishlists"
-                className="text-lg text-purple-600 hover:text-blue-600"
+                className="text-lg font-bold text-purple-600 hover:text-blue-600"
               >
                 Saved Wishlists
               </Link>
             )}
             <Link
               to="/profile"
-              className="text-lg text-purple-600 hover:text-blue-600"
+              className="text-lg font-bold text-purple-600 hover:text-blue-600"
             >
               Profile
             </Link>
             <button
-              className="text-lg text-purple-600 hover:text-blue-600"
+              className="text-lg font-bold font-bold text-purple-600 hover:text-blue-600"
               onClick={handleLogout}
             >
               Log Out
