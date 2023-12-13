@@ -1,13 +1,41 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { ProductInfo } from "../../App";
+import { CurrentUserContext, ProductInfo, Wishlist } from "../../App";
 import ProductCard from "../ProductCard";
 import * as targetClient from "../../targetClient";
+import AddToWishlistButton from "../AddToWishlistButton";
+import { getWishlistsForUser, updateWishlist } from "../../client";
 
 const Search: React.FC = () => {
   const [searchParams, _] = useSearchParams();
   const searchTerm = searchParams.get("q");
   const [products, setProducts] = useState<ProductInfo[]>([]);
+  const { user, setUser } = useContext(CurrentUserContext);
+
+  //get wishlists for user
+  const [wishlists, setWishlists] = useState<Wishlist[]>([]);
+  useEffect(() => {
+    if (user) {
+      getWishlistsForUser(user!.username).then((res) => {
+        setWishlists(res);
+      });
+    }
+  }, [user]);
+
+  //update wishlists for user
+  const updateWishlists = (newWishlists: Wishlist[]) => {
+    const updatedWishlists: Wishlist[] = [];
+    newWishlists.forEach((w) => {
+      updateWishlist(w).then((res) => {
+        if (res) {
+          console.log("Updated wishlist: ", res);
+          updatedWishlists.push(res);
+        }
+      });
+    });
+    console.log("Updated wishlists: ", updatedWishlists);
+    setWishlists(newWishlists);
+  };
 
   //when search term changes, clear products list to show loading
   useEffect(() => {
@@ -54,7 +82,19 @@ const Search: React.FC = () => {
       {(products as ProductInfo[]) && (
         <div className="flex flex-wrap gap-3 m-auto">
           {products.map((product) => (
-            <ProductCard key={product.tcin} product={product} />
+            <ProductCard
+              key={product.tcin}
+              product={product}
+              bottomContent={
+                user && (
+                  <AddToWishlistButton
+                    product={product}
+                    wishlists={wishlists}
+                    updateWishlists={updateWishlists}
+                  />
+                )
+              }
+            />
           ))}
         </div>
       )}

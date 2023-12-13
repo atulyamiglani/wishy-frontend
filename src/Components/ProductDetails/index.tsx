@@ -1,10 +1,11 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { ProductInfo, Wishlist } from "../../App";
+import { CurrentUserContext, ProductInfo, Wishlist } from "../../App";
 import mockWishlists from "../../MockDB/wishlists.json";
 import mockProducts from "../../MockDB/products.json";
 import AddToWishlistButton from "../AddToWishlistButton";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import * as targetClient from "../../targetClient";
+import { getWishlistsForUser, updateWishlist } from "../../client";
 
 const ratingView = (productRating: number, ratingsTotal: number) => (
   <>
@@ -31,6 +32,7 @@ const ratingView = (productRating: number, ratingsTotal: number) => (
 );
 
 const ProductsDetails: React.FC = () => {
+  const { user, setUser } = useContext(CurrentUserContext);
   const { productId } = useParams();
   const [product, setProduct] = useState<ProductInfo | undefined>(undefined);
 
@@ -57,12 +59,30 @@ const ProductsDetails: React.FC = () => {
     }
   }, [productId]);
 
-  // TODO: api call
-  const fetchWishlists = () => {
-    return mockWishlists as Wishlist[];
-  };
+  //get wishlists for user
+  const [wishlists, setWishlists] = useState<Wishlist[]>([]);
+  useEffect(() => {
+    if (user) {
+      getWishlistsForUser(user!.username).then((res) => {
+        setWishlists(res);
+      });
+    }
+  }, [user]);
 
-  const [wishlists, setWishlists] = useState(fetchWishlists());
+  //update wishlists for user
+  const updateWishlists = (newWishlists: Wishlist[]) => {
+    const updatedWishlists: Wishlist[] = [];
+    newWishlists.forEach((w) => {
+      updateWishlist(w).then((res) => {
+        if (res) {
+          console.log("Updated wishlist: ", res);
+          updatedWishlists.push(res);
+        }
+      });
+    });
+    console.log("Updated wishlists: ", updatedWishlists);
+    setWishlists(newWishlists);
+  };
 
   const navigate = useNavigate();
 
@@ -147,7 +167,7 @@ const ProductsDetails: React.FC = () => {
             <AddToWishlistButton
               product={product}
               wishlists={wishlists}
-              setWishlists={setWishlists}
+              updateWishlists={updateWishlists}
             />
           </div>
         </div>

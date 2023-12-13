@@ -93,13 +93,6 @@ export const getWishlistsForUser = async (username: string) => {
   return wishlists.data as Wishlist[];
 };
 
-const getWishlistFollowsForUser = async (username: string) => {
-  const wishlistFollows = await axios.get(
-    `${BACKEND_URL}/wishlist/following/${username}`
-  );
-  return wishlistFollows.data;
-};
-
 export const getWishlistsFollowedByUser = async (username: string) => {
   const wishlistFollows = await axios
     .get(`${BACKEND_URL}/wishlist/following/${username}`)
@@ -150,4 +143,13 @@ export const updateUser = async (user: User) => {
   );
   console.log("updated user", updatedUser);
   return updatedUser.data;
+};
+
+export const updateWishlist = async (wishlist: Wishlist) => {
+  const updatedWishlist = await axios.put(
+    `${BACKEND_URL}/wishlists/${wishlist._id}`,
+    wishlist
+  );
+  console.log("updated wishlist", updatedWishlist);
+  return updatedWishlist.data;
 };
