@@ -11,6 +11,7 @@ import {
   unfollowWishlist,
   getWishlistFollowers,
   getProduct,
+  updateWishlist,
 } from "../../client";
 
 const WishlistView: React.FC = () => {
@@ -105,6 +106,58 @@ const WishlistView: React.FC = () => {
     }
   };
 
+  //remove product from wishlist
+  const removeProductFromWishlist = (productId: string) => {
+    const newWishlist = { ...wishlist };
+    newWishlist.productInfos = newWishlist.productInfos.filter(
+      (info) => info.productId !== productId
+    );
+    updateWishlist(newWishlist).then((res) => {
+      if (res) {
+        console.log("Updated wishlist: ", res);
+        setWishlist(newWishlist);
+      }
+    });
+  };
+
+  //set user as product buyer
+  const setProductBuyer = (productId: string, buyerId: string) => {
+    console.log("Setting product buyer: ", productId, buyerId);
+    const newWishlist = { ...wishlist };
+    newWishlist.productInfos = newWishlist.productInfos.map((info) => {
+      if (info.productId === productId) {
+        return { ...info, buyerId };
+      } else {
+        return info;
+      }
+    });
+    console.log("NEW WISHLIST: ", newWishlist);
+    updateWishlist(newWishlist).then((res) => {
+      if (res) {
+        console.log("Updated wishlist: ", res);
+        setWishlist(newWishlist);
+      }
+    });
+  };
+
+  //set product buyer to null
+  const removeProductBuyer = (productId: string) => {
+    const newWishlist = { ...wishlist };
+    newWishlist.productInfos = newWishlist.productInfos.map((info) => {
+      if (info.productId === productId) {
+        return { ...info, buyerId: null };
+      } else {
+        return info;
+      }
+    });
+    updateWishlist(newWishlist).then((res) => {
+      if (res) {
+        console.log("Updated wishlist: ", res);
+        setWishlist(newWishlist);
+      }
+    });
+  };
+
   return (
     <div className="container m-auto">
       {/*Intro*/}
@@ -152,7 +205,7 @@ const WishlistView: React.FC = () => {
                 myWishlist ? (
                   <ProductRemoveButton
                     productId={product.tcin}
-                    onRemove={() => {}}
+                    onRemove={removeProductFromWishlist}
                   />
                 ) : (
                   showBuyButton && (
@@ -162,6 +215,8 @@ const WishlistView: React.FC = () => {
                           (info) => info.productId === product.tcin
                         ) || null
                       }
+                      setProductBuyer={setProductBuyer}
+                      removeProductBuyer={removeProductBuyer}
                     />
                   )
                 )

@@ -146,6 +146,7 @@ export const updateUser = async (user: User) => {
 };
 
 export const updateWishlist = async (wishlist: Wishlist) => {
+  console.log("updating wishlist", wishlist);
   const updatedWishlist = await axios.put(
     `${BACKEND_URL}/wishlists/${wishlist._id}`,
     wishlist
