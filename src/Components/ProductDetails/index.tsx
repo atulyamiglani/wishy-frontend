@@ -1,10 +1,9 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { ProductInfo, Wishlist } from "../../App";
-import mockWishlists from "../../MockDB/wishlists.json";
-import mockProducts from "../../MockDB/products.json";
+import { CurrentUserContext, ProductInfo, Wishlist } from "../../App";
 import AddToWishlistButton from "../AddToWishlistButton";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import * as targetClient from "../../targetClient";
+import { getWishlistsForUser, updateWishlist, getProduct } from "../../client";
 
 const ratingView = (productRating: number, ratingsTotal: number) => (
   <>
@@ -31,6 +30,7 @@ const ratingView = (productRating: number, ratingsTotal: number) => (
 );
 
 const ProductsDetails: React.FC = () => {
+  const { user, setUser } = useContext(CurrentUserContext);
   const { productId } = useParams();
   const [product, setProduct] = useState<ProductInfo | undefined>(undefined);
 
@@ -42,27 +42,43 @@ const ProductsDetails: React.FC = () => {
     console.log("Fetching Product...");
 
     //first, check for product in database
-    //todo: replace this with api call to node server
-    const product = mockProducts.find((p) => p.tcin === productId);
-    if (product) {
-      console.log("Found product in database: ", product);
-      setProduct(product);
-
-      //if not found in database, fetch from target api
-    } else if (productId != null) {
-      console.log("Product not found in database. Fetching from Target API.");
-      fetchProduct(productId).then((res) => {
+    const p = getProduct(productId!).then((res) => {
+      if (res) {
+        console.log("Product found in database: ", res);
         setProduct(res);
-      });
-    }
+      } else {
+        console.log("Product not found in database. Fetching from Target API.");
+        fetchProduct(productId!).then((res) => {
+          setProduct(res);
+        });
+      }
+    });
   }, [productId]);
 
-  // TODO: api call
-  const fetchWishlists = () => {
-    return mockWishlists as Wishlist[];
-  };
+  //get wishlists for user
+  const [wishlists, setWishlists] = useState<Wishlist[]>([]);
+  useEffect(() => {
+    if (user) {
+      getWishlistsForUser(user!.username).then((res) => {
+        setWishlists(res);
+      });
+    }
+  }, [user]);
 
-  const [wishlists, setWishlists] = useState(fetchWishlists());
+  //update wishlists for user
+  const updateWishlists = (newWishlists: Wishlist[]) => {
+    const updatedWishlists: Wishlist[] = [];
+    newWishlists.forEach((w) => {
+      updateWishlist(w).then((res) => {
+        if (res) {
+          console.log("Updated wishlist: ", res);
+          updatedWishlists.push(res);
+        }
+      });
+    });
+    console.log("Updated wishlists: ", updatedWishlists);
+    setWishlists(newWishlists);
+  };
 
   const navigate = useNavigate();
 
@@ -131,9 +147,9 @@ const ProductsDetails: React.FC = () => {
                     >
                       <path
                         stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
                         d="M1 5.917 5.724 10.5 15 1.5"
                       />
                     </svg>
@@ -143,13 +159,15 @@ const ProductsDetails: React.FC = () => {
               ))}
           </ul>
 
-          <div className="py-5">
-            <AddToWishlistButton
-              product={product}
-              wishlists={wishlists}
-              setWishlists={setWishlists}
-            />
-          </div>
+          {user && (
+            <div className="py-5">
+              <AddToWishlistButton
+                product={product}
+                wishlists={wishlists}
+                updateWishlists={updateWishlists}
+              />
+            </div>
+          )}
         </div>
       </div>
     );

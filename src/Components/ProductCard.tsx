@@ -1,7 +1,6 @@
 import React from "react";
-import { ProductInfo, Wishlist } from "../App";
+import { ProductInfo } from "../App";
 import { Link } from "react-router-dom";
-import AddToWishlistButton from "./AddToWishlistButton";
 import { ReactNode } from "react";
 
 interface ProductCardProps {

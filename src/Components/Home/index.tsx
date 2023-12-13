@@ -3,9 +3,9 @@ import ProductCard from "../ProductCard";
 import { CurrentUserContext, ProductInfo, Wishlist } from "../../App";
 import mockProducts from "../../MockDB/products.json";
 import AddToWishlistButton from "../AddToWishlistButton";
+import { getWishlistsForUser, updateWishlist } from "../../client";
 
 const Home: React.FC = () => {
-  const [wishlists, setWishlists] = useState<Wishlist[]>([]);
   const { user, setUser } = useContext(CurrentUserContext);
 
   //suggested wishlists
@@ -29,45 +29,29 @@ const Home: React.FC = () => {
   //get products from wishlists of people you follow
 
   //fetches wishlists for the current user
-  const fetchWishlistsForUser = async () => {
-    const mockReturnValue = new Promise((resolve, reject) => {
-      resolve([
-        {
-          wid: "1",
-          title: "My Wishlist",
-          owner: user,
-          productInfos: [{ productId: "1", buyerId: null }],
-        },
-        {
-          wid: "2",
-          title: "My Christmas Wishlist",
-          owner: user,
-          productInfos: [
-            { productId: "2", buyerId: null },
-            { productId: "3", buyerId: null },
-            { productId: "4", buyerId: null },
-          ],
-        },
-        {
-          wid: "3",
-          title: "My Birthday Wishlist",
-          owner: user,
-          productInfos: [
-            { productId: "5", buyerId: null },
-            { productId: "1", buyerId: null },
-          ],
-        },
-        {
-          wid: "4",
-          title: "My Last Wishlist",
-          owner: user,
-          productInfos: [{ productId: "3", buyerId: null }],
-        },
-      ]);
+  //get wishlists for user
+  const [wishlists, setWishlists] = useState<Wishlist[]>([]);
+  useEffect(() => {
+    if (user) {
+      getWishlistsForUser(user!.username).then((res) => {
+        setWishlists(res);
+      });
+    }
+  }, [user]);
+
+  //update wishlists for user
+  const updateWishlists = (newWishlists: Wishlist[]) => {
+    const updatedWishlists: Wishlist[] = [];
+    newWishlists.forEach((w) => {
+      updateWishlist(w).then((res) => {
+        if (res) {
+          console.log("Updated wishlist: ", res);
+          updatedWishlists.push(res);
+        }
+      });
     });
-    mockReturnValue.then((response) => {
-      setWishlists(response as Wishlist[]);
-    });
+    console.log("Updated wishlists: ", updatedWishlists);
+    setWishlists(newWishlists);
   };
 
   //fetches products
@@ -80,10 +64,6 @@ const Home: React.FC = () => {
     setProducts(productList);
   };
   useEffect(fetchProducts, []);
-
-  useEffect(() => {
-    fetchWishlistsForUser();
-  }, []);
 
   return (
     <div className="container m-auto">
@@ -98,7 +78,7 @@ const Home: React.FC = () => {
                 <AddToWishlistButton
                   product={product}
                   wishlists={wishlists}
-                  setWishlists={setWishlists}
+                  updateWishlists={updateWishlists}
                 />
               )
             }

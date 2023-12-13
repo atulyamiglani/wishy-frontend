@@ -1,5 +1,5 @@
 import axios from "axios";
-import { User, Wishlist } from "./App";
+import { ProductInfo, User, Wishlist } from "./App";
 import { SignUpFormValues } from "./Components/SignUp";
 import { LoginFormValues } from "./Components/Login";
 
@@ -93,13 +93,6 @@ export const getWishlistsForUser = async (username: string) => {
   return wishlists.data as Wishlist[];
 };
 
-const getWishlistFollowsForUser = async (username: string) => {
-  const wishlistFollows = await axios.get(
-    `${BACKEND_URL}/wishlist/following/${username}`
-  );
-  return wishlistFollows.data;
-};
-
 export const getWishlistsFollowedByUser = async (username: string) => {
   const wishlistFollows = await axios
     .get(`${BACKEND_URL}/wishlist/following/${username}`)
@@ -150,4 +143,31 @@ export const updateUser = async (user: User) => {
   );
   console.log("updated user", updatedUser);
   return updatedUser.data;
+};
+
+export const updateWishlist = async (wishlist: Wishlist) => {
+  console.log("updating wishlist", wishlist);
+  const updatedWishlist = await axios.put(
+    `${BACKEND_URL}/wishlists/${wishlist._id}`,
+    wishlist
+  );
+  console.log("updated wishlist", updatedWishlist);
+  return updatedWishlist.data;
+};
+
+export const addProduct = async (product: ProductInfo) => {
+  const newProduct = await axios.post(`${BACKEND_URL}/products`, product);
+  console.log("new product", newProduct);
+  return newProduct.data;
+};
+
+export const getProduct = async (id: string) => {
+  try {
+    const product = await axios.get(`${BACKEND_URL}/products/${id}`);
+    return product.data;
+  } catch (error) {
+    console.log("ERROR");
+    console.log(error);
+    return null;
+  }
 };

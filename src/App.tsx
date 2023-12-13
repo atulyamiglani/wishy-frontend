@@ -45,7 +45,7 @@ export interface Wishlist {
   description: string;
   productInfos: WishlistProductInfo[]; //product tcins and buyer ids
   owner: string; //owner id
-  created: string;
+  created: Date;
   lastUpdated: string;
 }
 

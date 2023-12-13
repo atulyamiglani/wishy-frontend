@@ -16,7 +16,9 @@ const ProfileWishlists: React.FC<ProfileWishlistsProps> = ({ wishlists }) => {
           <Link key={wishlist._id} to={`/wishlist/${wishlist._id}`}>
             <div className="hover:bg-purple-300">
               <h1 className="pt-3">{wishlist.title}</h1>
-              <p className="italic mb-2">Created {wishlist.created}</p>
+              <p className="italic mb-2">
+                Created {wishlist.created.toString()}
+              </p>
               <h3 className="pb-3">{wishlist.productInfos.length} Gifts</h3>
             </div>
           </Link>

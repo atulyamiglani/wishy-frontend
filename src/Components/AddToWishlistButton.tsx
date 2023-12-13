@@ -5,7 +5,7 @@ import WishlistModal from "./AddToWishlistModal";
 interface AddToWishlistButtonProps {
   product: ProductInfo;
   wishlists: Wishlist[];
-  setWishlists: React.Dispatch<React.SetStateAction<Wishlist[]>>;
+  updateWishlists: (newWishlists: Wishlist[]) => void;
 }
 
 /*
@@ -15,7 +15,7 @@ interface AddToWishlistButtonProps {
 const AddToWishlistButton: React.FC<AddToWishlistButtonProps> = ({
   product,
   wishlists,
-  setWishlists,
+  updateWishlists,
 }) => {
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -23,8 +23,8 @@ const AddToWishlistButton: React.FC<AddToWishlistButtonProps> = ({
     setModalOpen(false);
   };
 
-  const handleSubmit = (newWishlists: Wishlist[]) => {
-    setWishlists(newWishlists);
+  const handleSubmit = (wishlists: Wishlist[]) => {
+    updateWishlists(wishlists);
     setModalOpen(false);
   };
 
