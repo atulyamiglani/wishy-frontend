@@ -1,4 +1,4 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Home from "./Components/Home";
 import Profile from "./Components/Profile";
@@ -13,6 +13,7 @@ import MyWishlists from "./Components/Wishlist/MyWishlists";
 import SavedWishlists from "./Components/Wishlist/SavedWishlists";
 import PeopleList from "./Components/People";
 import Editor from "./Components/Profile/editor";
+import { getAccount } from "./client";
 
 export interface User {
   firstName: string;
@@ -56,6 +57,15 @@ export const CurrentUserContext = createContext<{
 
 function App() {
   const [user, setUser] = useState<null | User>(null);
+
+  useEffect(() => {
+    getAccount().then((account) => {
+      console.log("account", account);
+      if (account) {
+        setUser(account);
+      }
+    });
+  }, []);
 
   return (
     <CurrentUserContext.Provider value={{ user, setUser }}>
