@@ -89,7 +89,7 @@ const Home: React.FC = () => {
   useEffect(fetchFeed, []);
 
   return (
-    <div className="container px-4 m-auto">
+    <div className="container px-4 m-auto pb-5">
       <h1>Home</h1>
       <p className="mt-2 mb-4 w-8/12">
         Fulfill wishes with Wishy! Wishers can view products and add them to
