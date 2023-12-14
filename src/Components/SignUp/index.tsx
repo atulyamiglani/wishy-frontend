@@ -48,18 +48,18 @@ const SignUp: React.FC<{}> = () => {
           Create an Account
         </h2>
       </div>
-      <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+      <div className="mt-10 mx-auto w-full max-w-sm container px-8">
         {/* TODO: this form thing was adding query params to the url. 
         commented it out for now. Password shouldnt be in the query params lol. */}
         {/* <form className="space-y-6"> */}
         <div>
           <label
             htmlFor="firstName"
-            className="block text-sm font-medium leading-6 text-gray-900"
+            className="block text-sm font-medium leading-6 text-gray-900 mt-2"
           >
             First Name
           </label>
-          <div className="mt-2">
+          <div>
             <input
               id="firstName"
               name="name"
@@ -79,11 +79,11 @@ const SignUp: React.FC<{}> = () => {
         <div>
           <label
             htmlFor="lastName"
-            className="block text-sm font-medium leading-6 text-gray-900"
+            className="block text-sm font-medium leading-6 text-gray-900 mt-2"
           >
             Last name
           </label>
-          <div className="mt-2">
+          <div>
             <input
               id="lastName"
               name="name"
@@ -103,11 +103,11 @@ const SignUp: React.FC<{}> = () => {
         <div>
           <label
             htmlFor="username"
-            className="block text-sm font-medium leading-6 text-gray-900"
+            className="block text-sm font-medium leading-6 text-gray-900 mt-2"
           >
             username
           </label>
-          <div className="mt-2">
+          <div>
             <input
               id="username"
               name="name"
@@ -127,11 +127,11 @@ const SignUp: React.FC<{}> = () => {
         <div>
           <label
             htmlFor="email"
-            className="block text-sm font-medium leading-6 text-gray-900"
+            className="block text-sm font-medium leading-6 text-gray-900 mt-2"
           >
             Email
           </label>
-          <div className="mt-2">
+          <div>
             <input
               id="email"
               name="email"
@@ -151,11 +151,11 @@ const SignUp: React.FC<{}> = () => {
         <div>
           <label
             htmlFor="phone"
-            className="block text-sm font-medium leading-6 text-gray-900"
+            className="block text-sm font-medium leading-6 text-gray-900 mt-2"
           >
             Phone Number
           </label>
-          <div className="mt-2">
+          <div>
             <input
               id="phone"
               name="phone"
@@ -172,7 +172,7 @@ const SignUp: React.FC<{}> = () => {
             />
           </div>
         </div>
-        <label htmlFor="isWishing" className="block mb-2 text-sm font-medium">
+        <label htmlFor="isWishing" className="block text-sm font-medium mt-2">
           I am primarily a...
         </label>
         <select
@@ -192,12 +192,12 @@ const SignUp: React.FC<{}> = () => {
           <div className="flex items-center justify-between">
             <label
               htmlFor="password"
-              className="block text-sm font-medium leading-6 text-gray-900"
+              className="block text-sm font-medium leading-6 text-gray-900 mt-2"
             >
               Create Password
             </label>
           </div>
-          <div className="mt-2">
+          <div>
             <input
               id="password"
               name="password"
@@ -217,7 +217,7 @@ const SignUp: React.FC<{}> = () => {
 
         <div>
           <button
-            className="flex w-full justify-center rounded-md bg-purple-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            className="mt-4 mb-5 flex w-full justify-center rounded-md bg-purple-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             onClick={async () => {
               const signedUpUser = signUp(signUpFormValues);
               console.log("BYEEEEE", signedUpUser);

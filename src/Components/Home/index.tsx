@@ -88,7 +88,7 @@ const Home: React.FC = () => {
   useEffect(fetchFeed, []);
 
   return (
-    <div className="container m-auto">
+    <div className="container px-4 m-auto">
       <h1>Home</h1>
       {user && user.role === "WISHER" && (
         <h2>Products your friends are looking for...</h2>

@@ -27,7 +27,7 @@ const Login: React.FC<{}> = () => {
           Login
         </h2>
       </div>
-      <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+      <div className="container mt-10 mx-auto px-8 max-w-sm">
         {/* TODO: this form thing was adding query params to the url. 
         commented it out for now. Password shouldnt be in the query params lol. */}
         {/* <form className="space-y-6"> */}
@@ -77,7 +77,7 @@ const Login: React.FC<{}> = () => {
         </div>
         <div>
           <button
-            className="flex w-full justify-center rounded-md bg-purple-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            className="flex w-full justify-center rounded-md bg-purple-600 mt-5 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             onClick={async () => {
               console.log(loginValues);
               const loggedIn = signIn(loginValues);
@@ -95,7 +95,7 @@ const Login: React.FC<{}> = () => {
                 });
             }}
           >
-            Login
+            Log In
           </button>
           {showErrorToast && (
             <Toast>

@@ -159,7 +159,7 @@ const WishlistView: React.FC = () => {
   };
 
   return (
-    <div className="container m-auto mb-5">
+    <div className="container m-auto mb-5 px-4">
       {/*Intro*/}
       <h1 className="text-5xl font-bold mb-2">{wishlist.title}</h1>
       <div className="flex justify-between items-center mb-4">
@@ -195,7 +195,7 @@ const WishlistView: React.FC = () => {
       </div>
       <hr />
       <p className="text-lg italic mt-4 mb-4">
-        Created {wishlist.created.toString()}
+        Created {new Date(wishlist.created).toLocaleDateString()}
       </p>
       <p className="text-lg mb-4">{wishlist.description}</p>
 
