@@ -101,7 +101,7 @@ const WishlistModal: React.FC<WishlistModalProps> = ({
                   />
                   <div>
                     <h2 className="tracking-tight text-gray-900 line-clamp-3 mb-1">
-                      {product.title}
+                      {product.title.replace(/&#34;/g, '"')}
                     </h2>
                     <h2 className="font-normal">${product.price}</h2>
                   </div>

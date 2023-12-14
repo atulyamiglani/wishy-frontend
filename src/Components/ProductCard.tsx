@@ -20,7 +20,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
       <Link to={`/details/${product.tcin}`}>
         <img className="mb-2 rounded-t-lg" src={product.mainImage} alt="" />
         <h5 className="mb-2 text-lg tracking-tight text-gray-900 line-clamp-3">
-          {product.title}
+          {product.title.replace(/&#34;/g, '"')}
         </h5>
         <h2 className="mb-2">${product.price}</h2>
       </Link>

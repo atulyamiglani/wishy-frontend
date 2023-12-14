@@ -146,7 +146,7 @@ const ProductsDetails: React.FC = () => {
           </div>
           <div className="col-span-1">
             <h1 className="flex items-center text-5xl font-extrabold">
-              {product.title}
+              {`${product.title.replace(/&#34;/g, '"')}`}
             </h1>
 
             <h2 className="pt-4">${product.price}</h2>

@@ -90,11 +90,18 @@ const Home: React.FC = () => {
   return (
     <div className="container px-4 m-auto">
       <h1>Home</h1>
+      <p className="mt-2 mb-4 w-8/12">
+        Fulfill wishes with Wishy! Wishers can view products and add them to
+        wishlists. Gifters can view wishlists and sign up to buy gifts,
+        anonymously to the wisher. Organize birthdays, holidays, weddings and
+        more with Wishy!
+      </p>
+      <hr className="mb-4" />
       {user && user.role === "WISHER" && (
-        <h2>Products your friends are looking for...</h2>
+        <h2 className="mb-4">Products your friends are looking for...</h2>
       )}
       {user && user.role === "GIFTER" && <h2>Wishlists you follow... </h2>}
-      {!user && <h2>Popular Products...</h2>}
+      {!user && <h2 className="mb-4">Popular Products...</h2>}
       <div className="flex flex-wrap gap-3 m-auto">
         {products.map((product) => (
           <ProductCard
