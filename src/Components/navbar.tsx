@@ -11,7 +11,7 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <nav className="bg-white fixed top-0 w-full shadow-md p-4 flex items-center justify-between">
+    <nav className="bg-white fixed top-0 w-full shadow-md p-4 flex flex-wrap gap-y-3 gap-x-5 items-center justify-between">
       <Link
         to="/"
         className="text-3xl font-bold text-purple-600 hover:text-blue-600"
@@ -20,7 +20,7 @@ const Navbar: React.FC = () => {
       </Link>
       <SearchBar goToPageLink="search" placeHolder="Search for a product..." />
 
-      <div className="flex space-x-5">
+      <div className="flex flex-wrap space-x-5">
         {user == null && (
           <>
             <Link

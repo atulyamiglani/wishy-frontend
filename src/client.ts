@@ -189,3 +189,8 @@ export const getAccount = async () => {
   const account = await axios.get(`${BACKEND_URL}/account`);
   return account.data;
 };
+
+export const getAllWishlists = async () => {
+  const wishlists = await axios.get(`${BACKEND_URL}/wishlists`);
+  return wishlists.data as Wishlist[];
+};

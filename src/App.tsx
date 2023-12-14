@@ -74,7 +74,7 @@ function App() {
         <Navbar />
 
         {/* This is to make sure the navbar doesn't overlap the content */}
-        <div className="h-24"></div>
+        <div className="h-44 sm:h-24 "></div>
 
         <Routes>
           <Route path="/" element={<Home />} />

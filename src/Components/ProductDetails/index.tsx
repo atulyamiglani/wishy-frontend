@@ -3,7 +3,13 @@ import { CurrentUserContext, ProductInfo, Wishlist } from "../../App";
 import AddToWishlistButton from "../AddToWishlistButton";
 import { useContext, useEffect, useState } from "react";
 import * as targetClient from "../../targetClient";
-import { getWishlistsForUser, updateWishlist, getProduct } from "../../client";
+import {
+  getWishlistsForUser,
+  updateWishlist,
+  getProduct,
+  getAllWishlists,
+} from "../../client";
+import ProfileWishlists from "../Profile/profilewishlists";
 
 const ratingView = (productRating: number, ratingsTotal: number) => (
   <>
@@ -80,6 +86,16 @@ const ProductsDetails: React.FC = () => {
     setWishlists(newWishlists);
   };
 
+  //get all wishlists
+  const [allWishlists, setAllWishlists] = useState<Wishlist[]>([]);
+  useEffect(() => {
+    getAllWishlists().then((res) => {
+      setAllWishlists(
+        res.filter((w) => w.productInfos.some((p) => p.productId === productId))
+      );
+    });
+  }, []);
+
   const navigate = useNavigate();
 
   if (product === undefined) {
@@ -109,65 +125,73 @@ const ProductsDetails: React.FC = () => {
     return <>Sorry, we couldn't find your product. Please try again!</>;
   } else {
     return (
-      <div className="grid grid-cols-2 py-5">
-        <div className="col-span-1 content-center justify-self-center">
-          <img
-            className="object-contain hover:object-scale-down h-96 w-50"
-            src={product.mainImage}
-            alt={product.title}
-          />
-          <a
-            href={product.link}
-            target="_blank"
-            rel="noreferrer"
-            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full"
-          >
-            View in Target
-          </a>
-        </div>
-        <div className="col-span-1">
-          <h1 className="flex items-center text-5xl font-extrabold">
-            {product.title}
-          </h1>
-
-          <h2 className="pt-4">${product.price}</h2>
-          {ratingView(product.rating, product.ratingsTotal)}
-
-          <ul className="space-y-4 text-left text-gray-500 dark:text-gray-400 pt-4">
-            {product.featureBullets &&
-              product.featureBullets.map((feature: any) => (
-                <div key={feature.slice(0, 15)}>
-                  <li className="flex items-center space-x-3 rtl:space-x-reverse">
-                    <svg
-                      className="flex-shrink-0 w-3.5 h-3.5 text-green-500 dark:text-green-400"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 16 12"
-                    >
-                      <path
-                        stroke="currentColor"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M1 5.917 5.724 10.5 15 1.5"
-                      />
-                    </svg>
-                    <span>{feature}</span>
-                  </li>
-                </div>
-              ))}
-          </ul>
-
-          {user && (
-            <div className="py-5">
-              <AddToWishlistButton
-                product={product}
-                wishlists={wishlists}
-                updateWishlists={updateWishlists}
+      <div className="container px-4 mb-5 m-auto">
+        <div className="grid grid-cols-2 py-5">
+          <div className="col-span-1 content-center justify-self-center">
+            <div className="flex flex-col items-center">
+              <img
+                className="object-contain hover:object-scale-down h-96 w-50 mb-5"
+                src={product.mainImage}
+                alt={product.title}
               />
+              <a
+                href={product.link}
+                target="_blank"
+                rel="noreferrer"
+                className="bg-red-500 hover:bg-red-700 text-white w-36 font-bold py-2 px-4 rounded-full"
+              >
+                View in Target
+              </a>
             </div>
-          )}
+          </div>
+          <div className="col-span-1">
+            <h1 className="flex items-center text-5xl font-extrabold">
+              {product.title}
+            </h1>
+
+            <h2 className="pt-4">${product.price}</h2>
+            {ratingView(product.rating, product.ratingsTotal)}
+
+            <ul className="space-y-4 text-left text-gray-500 dark:text-gray-400 pt-4">
+              {product.featureBullets &&
+                product.featureBullets.map((feature: any) => (
+                  <div key={feature.slice(0, 15)}>
+                    <li className="flex items-center space-x-3 rtl:space-x-reverse">
+                      <svg
+                        className="flex-shrink-0 w-3.5 h-3.5 text-green-500 dark:text-green-400"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 16 12"
+                      >
+                        <path
+                          stroke="currentColor"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M1 5.917 5.724 10.5 15 1.5"
+                        />
+                      </svg>
+                      <span>{feature}</span>
+                    </li>
+                  </div>
+                ))}
+            </ul>
+
+            {user && (
+              <div className="py-5">
+                <AddToWishlistButton
+                  product={product}
+                  wishlists={wishlists}
+                  updateWishlists={updateWishlists}
+                />
+              </div>
+            )}
+          </div>
+        </div>
+        <div>
+          <h1 className="mt-5 mb-5">Wishlists Including This Product:</h1>
+          <ProfileWishlists wishlists={allWishlists} />
         </div>
       </div>
     );
