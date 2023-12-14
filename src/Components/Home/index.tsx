@@ -90,6 +90,11 @@ const Home: React.FC = () => {
   return (
     <div className="container m-auto">
       <h1>Home</h1>
+      {user && user.role === "WISHER" && (
+        <h2>Products your friends are looking for...</h2>
+      )}
+      {user && user.role === "GIFTER" && <h2>Wishlists you follow... </h2>}
+      {!user && <h2>Popular Products...</h2>}
       <div className="flex flex-wrap gap-3 m-auto">
         {products.map((product) => (
           <ProductCard
@@ -113,7 +118,6 @@ const Home: React.FC = () => {
         )}
         {user?.role === "GIFTER" && (
           <>
-            <h1>See what your friends are wishing for... </h1>
             <div className="container m-auto ps-8 pe-8 pt-8 mb-8 max-w-4xl">
               {<ProfileWishlists wishlists={feedWishlists} />}
             </div>

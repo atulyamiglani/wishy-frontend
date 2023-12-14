@@ -2,6 +2,8 @@ import { useContext, useState } from "react";
 import { CurrentUserContext, User } from "../../App";
 import { Navigate, useNavigate } from "react-router-dom";
 import { signUp } from "../../client";
+import { Toast } from "flowbite-react";
+import { HiX } from "react-icons/hi";
 
 export interface SignUpFormValues extends User {
   firstName: string;
@@ -14,6 +16,7 @@ export interface SignUpFormValues extends User {
 }
 
 const SignUp: React.FC<{}> = () => {
+  const [showErrorToast, setShowErrorToast] = useState(false);
   const [signUpFormValues, setSignUpFormValues] = useState<SignUpFormValues>({
     firstName: "",
     lastName: "",
@@ -27,6 +30,18 @@ const SignUp: React.FC<{}> = () => {
   const navigate = useNavigate();
   return (
     <>
+      {showErrorToast && (
+        <Toast>
+          <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-red-100 text-red-500 dark:bg-red-100 dark:text-red-500">
+            <Toast.Toggle onClick={() => setShowErrorToast(!showErrorToast)}>
+              <HiX className="h-5 w-5" />
+            </Toast.Toggle>
+          </div>
+          <div className="ml-3 text-sm font-normal" style={{ color: "black" }}>
+            Complete all the fields and submit the form again
+          </div>
+        </Toast>
+      )}
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-8 lg:px-8"></div>
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
         <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
@@ -204,12 +219,18 @@ const SignUp: React.FC<{}> = () => {
           <button
             className="flex w-full justify-center rounded-md bg-purple-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             onClick={async () => {
-              console.log(signUpFormValues);
               const signedUpUser = signUp(signUpFormValues);
-              signedUpUser.then((response) => {
-                setUser(response as User);
-                navigate("/profile");
-              });
+              console.log("BYEEEEE", signedUpUser);
+              signedUpUser
+                .then((response) => {
+                  console.log("HELLOOOO", response);
+
+                  setUser(response as User);
+                  navigate("/profile");
+                })
+                .catch((error) => {
+                  setShowErrorToast(true);
+                });
             }}
           >
             Sign up

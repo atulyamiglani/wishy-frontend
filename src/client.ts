@@ -184,3 +184,8 @@ export const getProduct = async (id: string) => {
     return null;
   }
 };
+
+export const getAccount = async () => {
+  const account = await axios.get(`${BACKEND_URL}/account`);
+  return account.data;
+};

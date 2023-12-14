@@ -2,6 +2,9 @@ import { useContext, useState } from "react";
 import { CurrentUserContext, User } from "../../App";
 import { Navigate, useNavigate } from "react-router-dom";
 import { signIn } from "../../client";
+import { Toast } from "flowbite-react";
+import { RxCross1 } from "react-icons/rx";
+import { HiCheck, HiExclamation, HiX } from "react-icons/hi";
 
 export interface LoginFormValues {
   username: string;
@@ -10,6 +13,7 @@ export interface LoginFormValues {
 
 const Login: React.FC<{}> = () => {
   const { user, setUser } = useContext(CurrentUserContext);
+  const [showErrorToast, setShowErrorToast] = useState(false);
   const [loginValues, setLoginValues] = useState<LoginFormValues>({
     username: "",
     password: "",
@@ -77,16 +81,40 @@ const Login: React.FC<{}> = () => {
             onClick={async () => {
               console.log(loginValues);
               const loggedIn = signIn(loginValues);
-              loggedIn.then((loggedIn) => {
-                setUser(loggedIn);
-                navigate("/profile");
-              });
+              loggedIn
+                .then((loggedIn) => {
+                  if (loggedIn === null) {
+                    setShowErrorToast(true);
+                  } else {
+                    setUser(loggedIn);
+                    navigate("/profile");
+                  }
+                })
+                .catch((error) => {
+                  console.log(error);
+                });
             }}
           >
             Login
           </button>
+          {showErrorToast && (
+            <Toast>
+              <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-red-100 text-red-500 dark:bg-red-100 dark:text-red-500">
+                <Toast.Toggle
+                  onClick={() => setShowErrorToast(!showErrorToast)}
+                >
+                  <HiX className="h-5 w-5" />
+                </Toast.Toggle>
+              </div>
+              <div
+                className="ml-3 text-sm font-normal"
+                style={{ color: "black" }}
+              >
+                Bad username or password
+              </div>
+            </Toast>
+          )}
         </div>
-        {/* </form> */}
       </div>
     </>
   );
