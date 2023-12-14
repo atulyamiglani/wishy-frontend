@@ -189,10 +189,12 @@ const ProductsDetails: React.FC = () => {
             )}
           </div>
         </div>
-        <div>
-          <h1 className="mt-5 mb-5">Wishlists Including This Product:</h1>
-          <ProfileWishlists wishlists={allWishlists} />
-        </div>
+        {allWishlists.length > 0 && (
+          <div>
+            <h1 className="mt-5 mb-5">Wishlists Including This Product:</h1>
+            <ProfileWishlists wishlists={allWishlists} />
+          </div>
+        )}
       </div>
     );
   }
