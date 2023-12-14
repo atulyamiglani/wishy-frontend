@@ -10,6 +10,7 @@ import {
   updateWishlist,
 } from "../../client";
 import ProfileWishlists from "../Profile/profilewishlists";
+import SearchBar from "../Search/SearchBar";
 
 const Home: React.FC = () => {
   const { user, setUser } = useContext(CurrentUserContext);
@@ -97,11 +98,17 @@ const Home: React.FC = () => {
         more with Wishy!
       </p>
       <hr className="mb-4" />
+      {!user && (
+        <>
+          <SearchBar goToPageLink="people" placeHolder="Find people..." />
+          <hr className="mt-4" />
+        </>
+      )}
       {user && user.role === "WISHER" && (
         <h2 className="mb-4">Products your friends are looking for...</h2>
       )}
       {user && user.role === "GIFTER" && <h2>Wishlists you follow... </h2>}
-      {!user && <h2 className="mb-4">Popular Products...</h2>}
+      {!user && <h2 className="mb-4 pt-8">Popular Products...</h2>}
       <div className="flex flex-wrap gap-3 m-auto">
         {products.map((product) => (
           <ProductCard

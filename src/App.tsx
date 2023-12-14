@@ -114,10 +114,7 @@ function App() {
             path="/saved-wishlists"
             element={user ? <SavedWishlists /> : <Navigate to="/login" />}
           />
-          <Route
-            path="/people"
-            element={user ? <PeopleList /> : <Navigate to="/login" />}
-          />
+          <Route path="/people" element={<PeopleList />} />
         </Routes>
       </BrowserRouter>
     </CurrentUserContext.Provider>

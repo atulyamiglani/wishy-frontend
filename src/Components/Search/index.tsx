@@ -56,10 +56,10 @@ const Search: React.FC = () => {
     }
   }, [searchTerm]);
   return (
-    <div>
-      <h3>Results for {searchTerm}...</h3>
+    <div className="grid">
+      <h3 className="mx-4">Results for {searchTerm}...</h3>
       {products.length === 0 && (
-        <div role="status">
+        <div role="status" className="justify-self-center place-self-center">
           <svg
             aria-hidden="true"
             className="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
